@@ -9,6 +9,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
 
     steps:
     - uses: actions/checkout@v4
@@ -40,6 +42,8 @@ jobs:
     
     - name: Push to deployment branch
       if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
         cd deploy
         git init
@@ -48,5 +52,5 @@ jobs:
         git add .
         git commit -m "Deploy static build"
         git branch -M deploy
-        git remote add origin-deploy https://${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
-        git push -f origin-deploy deploy 
+        git remote add origin "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+        git push -f origin deploy 
