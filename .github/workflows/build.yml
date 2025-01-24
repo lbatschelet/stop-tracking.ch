@@ -1,4 +1,4 @@
-name: Build
+name: Build and Deploy
 
 on:
   push:
@@ -22,13 +22,31 @@ jobs:
     - name: Install dependencies
       run: npm ci
       
-    - name: Build and Export
-      run: |
-        npm run build
-        ls -la out/
+    - name: Build
+      run: npm run build
       
-    - name: Deploy to GitHub Pages
-      uses: JamesIves/github-pages-deploy-action@v4
-      with:
-        folder: out
-        clean: true 
+    - name: Prepare for deployment
+      if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+      run: |
+        # Create deployment directory
+        mkdir -p deploy
+        # Copy static files
+        cp -r out/* deploy/
+        # Add a basic .htaccess for clean URLs
+        echo "RewriteEngine On" > deploy/.htaccess
+        echo "RewriteCond %{REQUEST_FILENAME} !-f" >> deploy/.htaccess
+        echo "RewriteCond %{REQUEST_FILENAME} !-d" >> deploy/.htaccess
+        echo "RewriteRule ^(.*)$ /$1.html [L]" >> deploy/.htaccess
+    
+    - name: Push to deployment branch
+      if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+      run: |
+        cd deploy
+        git init
+        git config --global user.email "github-actions[bot]@users.noreply.github.com"
+        git config --global user.name "github-actions[bot]"
+        git add .
+        git commit -m "Deploy static build"
+        git branch -M deploy
+        git remote add origin-deploy https://${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
+        git push -f origin-deploy deploy 
