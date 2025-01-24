@@ -1,36 +1,83 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# versteckis.ch
 
-## Getting Started
+A playful browser-based hide and seek interaction - adding a fun, hacker-themed twist to an otherwise empty webpage.
 
-First, run the development server:
+## Project Overview
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+The project turns a blank webpage into an interactive experience with a retro-tech aesthetic. Visitors engage with a hidden button that reveals itself based on cursor proximity, accompanied by Matrix-inspired visuals and hacker-themed messages. It's not a game in the traditional sense, but rather an engaging way to make an empty page more interesting.
+
+### Key Features
+
+- Matrix-inspired visual effects
+- Proximity-based interaction
+- Dynamic visual feedback with colors and glitch effects
+- Retro-tech themed messages
+- Responsive design for both desktop and mobile
+
+## Project Structure
+
+```
+src/
+├── app/                    # Next.js App Router and global styles
+├── components/            
+│   └── HideAndSeek/       # Main game components
+│       ├── index.tsx      # Main game logic
+│       ├── ClientContent.tsx    # UI component for active game
+│       ├── MessageItem.tsx      # Individual message display
+│       ├── SplashScreen.tsx     # Start screen
+│       └── StaticLayout.tsx     # Static layout for SSR
+├── hooks/                 # Custom React Hooks
+│   ├── useGameState.ts    # Game state and logic
+│   ├── useMessages.ts     # Message management
+│   └── usePosition.ts     # Button positioning
+├── types/                 # TypeScript definitions
+│   └── game.ts           
+├── utils/                 # Helper functions
+│   ├── matrix.ts          # Matrix effect generation
+│   └── proximity.ts       # Proximity calculations
+└── data/                  # Static data
+    └── messages.ts        # Game messages
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Technologies
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- Next.js 15
+- React 19
+- TypeScript
+- Tailwind CSS
+- CSS Animations
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Development
 
-## Learn More
+1. Clone repository
+2. Install dependencies:
+```bash
+npm install
+```
 
-To learn more about Next.js, take a look at the following resources:
+3. Start development server:
+```bash
+npm run dev
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+4. Build for production:
+```bash
+npm run build
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Architecture
 
-## Deploy on Vercel
+The project follows a clear separation of concerns:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- **Components**: Pure UI components that receive and render props
+- **Hooks**: State management and business logic
+- **Utils**: Pure functions for calculations and transformations
+- **Types**: Central TypeScript definitions
+- **Data**: Static content
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Performance
+
+- Lazy loading for matrix effects
+- Optimized animations using CSS transforms
+- Efficient state management through custom hooks
+- SSR-compatible through client/server separation
