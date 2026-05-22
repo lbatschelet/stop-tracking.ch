@@ -1,0 +1,23 @@
+/// <reference types="@testing-library/jest-dom" />
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import Zine from './index';
+
+describe('Zine', () => {
+  it('renders the cover spread', () => {
+    render(<Zine />);
+    expect(
+      screen.getByText(/Who gets watched is never an accident\./i),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(/a zine on AI, state surveillance/i),
+    ).toBeInTheDocument();
+  });
+
+  it('navigates to the next page', async () => {
+    render(<Zine />);
+    fireEvent.click(screen.getByRole('button', { name: /next/i }));
+    await waitFor(() => {
+      expect(screen.getByText(/The Panopticon/i)).toBeInTheDocument();
+    });
+  });
+});

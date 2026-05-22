@@ -1,9 +1,5 @@
-import HideAndSeek from '@/components/HideAndSeek';
+import ZineLoader from '@/components/Zine/ZineLoader';
 
 export default function Home() {
-  return (
-    <main>
-      <HideAndSeek />
-    </main>
-  );
+  return <ZineLoader />;
 }

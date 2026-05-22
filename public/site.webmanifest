@@ -1,11 +1,11 @@
 {
-  "name": "versteckis.ch",
+  "name": "They're Watching",
   "short_name": "versteckis",
-  "description": "An interactive terminal-based hide and seek game",
+  "description": "A digital zine: a field guide to surveillance and self-defense.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#000000",
-  "theme_color": "#000000",
+  "background_color": "#0a0a0a",
+  "theme_color": "#0a0a0a",
   "icons": [
     {
       "src": "/android-chrome-192x192.png",
@@ -18,4 +18,4 @@
       "type": "image/png"
     }
   ]
-} 
+}
