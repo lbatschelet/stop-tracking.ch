@@ -111,7 +111,7 @@ export function PanopticonVisual() {
 
   return (
     <div className={styles.coverVisual} aria-hidden="true">
-      <svg viewBox="-18 -12 136 124" className={styles.coverSvg}>
+      <svg viewBox="-18 -12 136 102" className={styles.coverSvg}>
         <defs>
           <filter id="beamSoft" x="-80%" y="-80%" width="260%" height="260%">
             <feGaussianBlur stdDeviation="1.6" result="blur" />
