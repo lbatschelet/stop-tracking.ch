@@ -1,7 +1,7 @@
 {
-  "name": "They're Watching",
-  "short_name": "versteckis",
-  "description": "A digital zine: a field guide to surveillance and self-defense.",
+  "name": "Escaping the Panopticon",
+  "short_name": "Panopticon",
+  "description": "A digital zine on AI, state surveillance & digital self-defense.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#0a0a0a",

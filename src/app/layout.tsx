@@ -16,8 +16,8 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  title: "They're Watching — A Field Guide",
-  description: 'A digital zine: a field guide to surveillance and self-defense.',
+  title: 'Escaping the Panopticon',
+  description: 'A digital zine on AI, state surveillance & digital self-defense.',
   icons: {
     icon: '/favicon.ico',
     apple: '/apple-touch-icon.png',
