@@ -39,6 +39,28 @@ export default function Zine() {
   goPrevRef.current = goPrev;
   goNextRef.current = goNext;
 
+  const touchStartRef = useRef<{ x: number; y: number } | null>(null);
+
+  const onTouchStart = useCallback((e: React.TouchEvent) => {
+    const t = e.changedTouches[0];
+    touchStartRef.current = { x: t.clientX, y: t.clientY };
+  }, []);
+
+  const onTouchEnd = useCallback((e: React.TouchEvent) => {
+    const start = touchStartRef.current;
+    if (!start) return;
+    const t = e.changedTouches[0];
+    const dx = t.clientX - start.x;
+    const dy = t.clientY - start.y;
+    touchStartRef.current = null;
+
+    if (Math.abs(dx) < 50) return;
+    if (Math.abs(dx) < Math.abs(dy) * 1.2) return;
+
+    if (dx < 0) goNextRef.current();
+    else goPrevRef.current();
+  }, []);
+
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'ArrowRight' || e.key === ' ') {
@@ -70,12 +92,17 @@ export default function Zine() {
         style={{ opacity: hintVisible ? 1 : 0 }}
         aria-hidden={!hintVisible}
       >
-        ← / → or click the arrows
+        <span className={styles.hintDesktop}>← / → or click the arrows</span>
+        <span className={styles.hintMobile}>swipe or tap the arrows</span>
       </div>
 
       <div className={styles.stage}>
         <div className={styles.pageViewport}>
-          <div className={styles.pageShell}>
+          <div
+            className={styles.pageShell}
+            onTouchStart={onTouchStart}
+            onTouchEnd={onTouchEnd}
+          >
             <div className={styles.terminalBar}>
               <span className={styles.terminalDots} aria-hidden="true">
                 <i />

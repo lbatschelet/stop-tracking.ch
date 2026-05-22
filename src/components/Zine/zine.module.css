@@ -66,6 +66,7 @@
   border: 1px solid #242424;
   border-radius: 4px;
   background: #0b0b0b;
+  touch-action: pan-y;
 }
 
 .terminalBar {
@@ -825,6 +826,10 @@
   transition: opacity 0.5s;
 }
 
+.hintMobile {
+  display: none;
+}
+
 .recCover {
   position: absolute;
   top: 32px;
@@ -836,6 +841,18 @@
 }
 
 @media (max-width: 720px) {
+  .hintDesktop {
+    display: none;
+  }
+
+  .hintMobile {
+    display: inline;
+  }
+
+  .coverText {
+    margin-top: 12px;
+  }
+
   .pageShell {
     width: min(100%, calc(100vw - 24px));
     max-height: min(520px, calc(100vh - 120px));
