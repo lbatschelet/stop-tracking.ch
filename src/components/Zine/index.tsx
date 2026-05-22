@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { zinePages } from './spreads';
 import styles from './zine.module.css';
 import { ZineNav } from './ZineNav';
@@ -8,7 +8,8 @@ import { ZineNav } from './ZineNav';
 export default function Zine() {
   const [index, setIndex] = useState(0);
   const [hintVisible, setHintVisible] = useState(true);
-  const [direction, setDirection] = useState<'next' | 'prev'>('next');
+  const [navGen, setNavGen] = useState(0);
+  const indexRef = useRef(0);
 
   const total = zinePages.length;
   const isFirst = index === 0;
@@ -16,32 +17,38 @@ export default function Zine() {
   const pageLabel = String(index + 1).padStart(2, '0');
   const totalLabel = String(total).padStart(2, '0');
 
+  indexRef.current = index;
+
   const goPrev = useCallback(() => {
-    setDirection('prev');
-    setIndex((i) => Math.max(0, i - 1));
+    if (indexRef.current <= 0) return;
+    setNavGen((g) => g + 1);
     setHintVisible(false);
+    setIndex((i) => i - 1);
   }, []);
 
   const goNext = useCallback(() => {
-    setDirection('next');
-    setIndex((i) => Math.min(total - 1, i + 1));
+    if (indexRef.current >= total - 1) return;
+    setNavGen((g) => g + 1);
     setHintVisible(false);
+    setIndex((i) => i + 1);
   }, [total]);
 
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'ArrowRight' || e.key === ' ') {
+        if (indexRef.current >= total - 1) return;
         e.preventDefault();
         goNext();
       }
       if (e.key === 'ArrowLeft') {
+        if (indexRef.current <= 0) return;
         e.preventDefault();
         goPrev();
       }
     };
     window.addEventListener('keydown', onKeyDown);
     return () => window.removeEventListener('keydown', onKeyDown);
-  }, [goNext, goPrev]);
+  }, [goNext, goPrev, total]);
 
   useEffect(() => {
     const timer = window.setTimeout(() => setHintVisible(false), 5000);
@@ -72,13 +79,7 @@ export default function Zine() {
               <span className={styles.terminalPath}>~/versteckis/{page.id}.md</span>
               <span className={styles.terminalState}>LIVE</span>
             </div>
-            <div
-              key={`${page.id}-${direction}`}
-              className={[
-                styles.pageInner,
-                direction === 'next' ? styles.pageInNext : styles.pageInPrev,
-              ].join(' ')}
-            >
+            <div key={`${page.id}-${navGen}`} className={styles.pageInner}>
               {page.content}
             </div>
           </div>

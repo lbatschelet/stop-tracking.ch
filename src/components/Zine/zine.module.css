@@ -121,36 +121,6 @@
   height: calc(100% - 34px);
 }
 
-@keyframes pageInNext {
-  from {
-    opacity: 0;
-    transform: translateX(14px) scale(0.992);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0) scale(1);
-  }
-}
-
-@keyframes pageInPrev {
-  from {
-    opacity: 0;
-    transform: translateX(-14px) scale(0.992);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0) scale(1);
-  }
-}
-
-.pageInNext {
-  animation: pageInNext 220ms ease-out both;
-}
-
-.pageInPrev {
-  animation: pageInPrev 220ms ease-out both;
-}
-
 .page {
   width: 100%;
   height: 100%;
@@ -166,21 +136,41 @@
   scrollbar-color: #2a2a2a transparent;
 }
 
-@keyframes blockIn {
-  from {
-    opacity: 0;
-    transform: translateY(8px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+.typeSlot {
+  position: relative;
 }
 
-.blockEnter {
-  opacity: 0;
-  animation: blockIn 260ms ease-out both;
-  animation-delay: calc(var(--block-i, 0) * 34ms);
+.typeGhost {
+  visibility: hidden;
+  pointer-events: none;
+  user-select: none;
+}
+
+.typeBlock {
+  position: relative;
+}
+
+.typeBlockOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+}
+
+.typeWaiting {
+  min-height: 0;
+}
+
+.typeCursor {
+  color: var(--green);
+  animation: blink 0.9s steps(1) infinite;
+  margin-left: 1px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .typeCursor {
+    animation: none;
+  }
 }
 
 .footerBlock {
@@ -278,7 +268,8 @@
   content: '>';
   position: absolute;
   left: 0;
-  top: 0;
+  top: 0.08em;
+  line-height: 1;
   color: #3f6f53;
 }
 
@@ -415,7 +406,7 @@
   line-height: 1.1;
   font-weight: 700;
   color: var(--amber);
-  margin-bottom: 24px;
+  margin-bottom: 16px;
 }
 
 .coverTitleL2 {
@@ -425,6 +416,36 @@
 .coverSub {
   font-size: clamp(12px, 1.4vw, 15px);
   color: var(--dim);
+}
+
+.coverPage {
+  justify-content: flex-start;
+}
+
+.coverBlock {
+  flex: 1;
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-height: 100%;
+}
+
+.coverLayout {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  min-height: 100%;
+  gap: 12px;
+}
+
+.coverText {
+  text-align: center;
+  margin-top: auto;
+  padding-bottom: 4px;
 }
 
 .coverPrompt {
@@ -482,6 +503,11 @@
   background: rgba(24, 36, 28, 0.75);
   padding: 0 4px;
   border-radius: 3px;
+}
+
+.inlineAutoLink {
+  color: var(--cyan);
+  text-decoration: none;
 }
 
 .kwDanger {
@@ -570,6 +596,34 @@
   font-size: clamp(10px, 0.95vw, 12px);
   color: var(--dim);
   letter-spacing: 0.02em;
+  position: relative;
+  z-index: 2;
+}
+
+.coverVisual {
+  position: relative;
+  width: min(100%, 560px);
+  flex: 1 1 62%;
+  min-height: clamp(260px, 48vh, 460px);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  overflow: visible;
+  opacity: 0.92;
+  filter: saturate(0.58) contrast(1.08);
+  pointer-events: none;
+  padding-top: 0;
+}
+
+.coverSvg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  overflow: visible;
+}
+
+.coverBeam {
+  mix-blend-mode: screen;
 }
 
 /* Collapsible info box on the right pages. */
@@ -642,6 +696,27 @@
   padding: 10px 12px 12px;
 }
 
+.referencesBox .zb {
+  padding-left: 18px;
+  text-indent: -18px;
+  margin-bottom: 7px;
+  line-height: 1.55;
+  color: var(--ink);
+}
+
+.referencesBox .iItalic,
+.referencesBox .iBold,
+.referencesBox .kwDanger,
+.referencesBox .kwAction,
+.referencesBox .kwSignal {
+  color: inherit;
+}
+
+.referencesBox .inlineAutoLink {
+  color: inherit;
+  text-decoration: none;
+}
+
 .boxBody .zb,
 .boxBody .step {
   font-size: clamp(9.5px, 0.9vw, 11px);
@@ -662,6 +737,10 @@
   line-height: 1.5;
   color: var(--dim);
   letter-spacing: 0.02em;
+}
+
+.toolkitFooter {
+  margin-top: auto;
 }
 
 .creditsLink {
@@ -753,6 +832,7 @@
   font-size: 11px;
   letter-spacing: 0.12em;
   color: var(--red);
+  z-index: 3;
 }
 
 @media (max-width: 720px) {

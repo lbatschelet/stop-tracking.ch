@@ -5,9 +5,8 @@ import Zine from './index';
 describe('Zine', () => {
   it('renders the cover spread', () => {
     render(<Zine />);
-    expect(
-      screen.getByText(/Who gets watched is never an accident\./i),
-    ).toBeInTheDocument();
+    expect(screen.getByText(/ESCAPING/i)).toBeInTheDocument();
+    expect(screen.getByText(/THE PANOPTICON/i)).toBeInTheDocument();
     expect(
       screen.getByText(/a zine on AI, state surveillance/i),
     ).toBeInTheDocument();

@@ -13,7 +13,6 @@ import type { ZinePageDef, ZineSpreadDef } from './types';
 const coverPage: ZinePageDef = {
   id: 'cover',
   alone: true,
-  center: true,
   bg: '#0a0a0a',
   blocks: [{ kind: 'cover' }],
 };
@@ -35,18 +34,6 @@ const panopticonPage: ZinePageDef = {
       kind: 'p',
       lines: [
         'Two centuries later, Michel Foucault saw what that design really does. After a while, the guard becomes unnecessary. Never sure whether anyone is looking, the prisoners begin to act as if someone always is. They watch themselves. Power stops being something done to them and becomes something they do to themselves.',
-      ],
-    },
-    {
-      kind: 'pull',
-      size: 'big',
-      lines: ['Visibility is a trap.'],
-    },
-    {
-      kind: 'p',
-      tone: 'dim',
-      lines: [
-        'Swap the tower for a phone, the cells for apps, the guard for a company, an agency, an ex-partner. The building is gone. The feeling of being watched is everywhere.',
       ],
     },
   ],
@@ -537,10 +524,34 @@ const escapePage: ZinePageDef = {
     },
     {
       kind: 'cta',
-      lines: ['Start at Level 1. Today.', 'Tell one person.'],
+      lines: ['Start at Level 1. Today.'],
     },
   ],
 };
+
+const referencesList = [
+  '404 Media. (n.d.). Investigations on ICE, Palantir systems, and data-broker loopholes. https://www.404media.co/',
+  'Amnesty International Switzerland. (n.d.). Materials on data retention and BUEPF. https://www.amnesty.ch/',
+  'Associated Press. (2025). Reporting on data-sharing between CMS and DHS/ICE.',
+  'Blick. (2025, February 19). Reporting on covert surveillance of climate activists in Geneva. https://www.blick.ch/politik/',
+  'Browne, Simone. (2015). *Dark matters: On the surveillance of blackness*. Duke University Press.',
+  'Coalition Against Stalkerware. (n.d.). *Information for media*. https://stopstalkerware.org/information-for-media/',
+  'Dubrofsky, Rachel E., & Magnet, Shoshana Amielle (Eds.). (2015). *Feminist surveillance studies*. Duke University Press.',
+  'Electronic Frontier Foundation. (n.d.). *Surveillance self-defense*. https://ssd.eff.org/',
+  'Federal Data Protection and Information Commissioner (FDPIC). (n.d.). *The revised Federal Act on Data Protection (revFADP)*. https://www.edoeb.admin.ch/',
+  'Foucault, Michel. (1977). *Discipline and punish: The birth of the prison* (Alan Sheridan, Trans.). Vintage Books. (Original work published 1975).',
+  'grundrechte.ch. (n.d.). *From the fiche scandal to modern intelligence systems*. https://grundrechte.ch/',
+  'Haraway, Donna J. (1988). Situated knowledges: The science question in feminism and the privilege of partial perspective. *Feminist Studies, 14*(3), 575-599. https://doi.org/10.2307/3178066',
+  'Mozilla Foundation. (2022). *Privacy not included: Reproductive health apps and wearables*. https://foundation.mozilla.org/en/privacynotincluded/',
+  'Privacy International. (2023). *All eyes on my period: Period tracking apps and the future of privacy in a post-Roe world*. https://privacyinternational.org/long-read/5593/all-eyes-my-period-period-tracking-apps-and-future-privacy-post-roe-world',
+  'Proton AG. (2023, April 21). *Why Proton won\'t comply with US anti-abortion data requests*. https://proton.me/blog/data-privacy-abortion',
+  'Proton AG. (n.d.). *Why is Proton based in Switzerland?* https://proton.me/blog/switzerland',
+  'required AG. (2024). *revFADP - New Swiss data protection law since September 1, 2023*. https://required.com/de/blog/revdsg-datenschutzgesetz/',
+  'Smith, Andrea. (2015). Not-seeing: State surveillance, settler colonialism, and gender violence. In Rachel E. Dubrofsky & Shoshana Amielle Magnet (Eds.), *Feminist surveillance studies* (pp. 21-38). Duke University Press.',
+  'Swiss Confederation. (2023). *Federal Act on Data Protection (FADP)* (Status as of September 1, 2023). Fedlex. https://www.fedlex.admin.ch/',
+  'Swiss Confederation. (n.d.). *Federal Act on the Surveillance of Post and Telecommunications (BUEPF)*. Fedlex. https://www.fedlex.admin.ch/',
+  'Zuboff, Shoshana. (2019). *The age of surveillance capitalism: The fight for a human future at the new frontier of power*. PublicAffairs.',
+];
 
 // ---------- BACK ----------
 
@@ -558,34 +569,7 @@ const backPage: ZinePageDef = {
     {
       kind: 'box',
       title: 'References',
-      blocks: [
-        {
-          kind: 'p',
-          lines: [
-            '404 Media. (n.d.). Investigations on ICE, Palantir systems, and data-broker loopholes. https://www.404media.co/',
-            'Amnesty International Switzerland. (n.d.). Materials on data retention and BUEPF. https://www.amnesty.ch/',
-            'Associated Press. (2025). Reporting on data-sharing between CMS and DHS/ICE.',
-            'Blick. (2025, February 19). Reporting on covert surveillance of climate activists in Geneva. https://www.blick.ch/politik/',
-            'Browne, Simone. (2015). *Dark matters: On the surveillance of blackness*. Duke University Press.',
-            'Coalition Against Stalkerware. (n.d.). *Information for media*. https://stopstalkerware.org/information-for-media/',
-            'Dubrofsky, Rachel E., & Magnet, Shoshana Amielle (Eds.). (2015). *Feminist surveillance studies*. Duke University Press.',
-            'Electronic Frontier Foundation. (n.d.). *Surveillance self-defense*. https://ssd.eff.org/',
-            'Federal Data Protection and Information Commissioner (FDPIC). (n.d.). *The revised Federal Act on Data Protection (revFADP)*. https://www.edoeb.admin.ch/',
-            'Foucault, Michel. (1977). *Discipline and punish: The birth of the prison* (Alan Sheridan, Trans.). Vintage Books. (Original work published 1975).',
-            'grundrechte.ch. (n.d.). *From the fiche scandal to modern intelligence systems*. https://grundrechte.ch/',
-            'Haraway, Donna J. (1988). Situated knowledges: The science question in feminism and the privilege of partial perspective. *Feminist Studies, 14*(3), 575-599. https://doi.org/10.2307/3178066',
-            'Mozilla Foundation. (2022). *Privacy not included: Reproductive health apps and wearables*. https://foundation.mozilla.org/en/privacynotincluded/',
-            'Privacy International. (2023). *All eyes on my period: Period tracking apps and the future of privacy in a post-Roe world*. https://privacyinternational.org/long-read/5593/all-eyes-my-period-period-tracking-apps-and-future-privacy-post-roe-world',
-            'Proton AG. (2023, April 21). *Why Proton won\'t comply with US anti-abortion data requests*. https://proton.me/blog/data-privacy-abortion',
-            'Proton AG. (n.d.). *Why is Proton based in Switzerland?* https://proton.me/blog/switzerland',
-            'required AG. (2024). *revFADP - New Swiss data protection law since September 1, 2023*. https://required.com/de/blog/revdsg-datenschutzgesetz/',
-            'Smith, Andrea. (2015). Not-seeing: State surveillance, settler colonialism, and gender violence. In Rachel E. Dubrofsky & Shoshana Amielle Magnet (Eds.), *Feminist surveillance studies* (pp. 21-38). Duke University Press.',
-            'Swiss Confederation. (2023). *Federal Act on Data Protection (FADP)* (Status as of September 1, 2023). Fedlex. https://www.fedlex.admin.ch/',
-            'Swiss Confederation. (n.d.). *Federal Act on the Surveillance of Post and Telecommunications (BUEPF)*. Fedlex. https://www.fedlex.admin.ch/',
-            'Zuboff, Shoshana. (2019). *The age of surveillance capitalism: The fight for a human future at the new frontier of power*. PublicAffairs.',
-          ],
-        },
-      ],
+      blocks: referencesList.map((entry) => ({ kind: 'p', lines: [entry] })),
     },
   ],
 };

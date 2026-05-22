@@ -19,6 +19,7 @@ export const toolkitLinks: ToolkitLink[] = [
   { key: 'aliases', label: 'SimpleLogin', href: 'https://simplelogin.io/' },
   { key: 'aliases', label: 'Addy', href: 'https://addy.io/' },
   { key: 'network', label: 'Pi-hole', href: 'https://pi-hole.net/' },
+  { key: 'cycle', label: 'Euki', href: 'https://eukiapp.com/' },
 ];
 
 export const orgLinks: { label: string; href: string }[] = [

@@ -33,11 +33,13 @@ export function PageAlone({
   center,
   vCenter,
   style,
+  className,
   children,
 }: {
   center?: boolean;
   vCenter?: boolean;
   style?: CSSProperties;
+  className?: string;
   children: ReactNode;
 }) {
   return (
@@ -47,6 +49,7 @@ export function PageAlone({
         styles.pageAlone,
         center ? styles.center : '',
         !center && vCenter ? styles.vCenter : '',
+        className,
       ]
         .filter(Boolean)
         .join(' ')}
