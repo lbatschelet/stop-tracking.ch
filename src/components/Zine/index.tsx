@@ -19,6 +19,9 @@ export default function Zine() {
 
   indexRef.current = index;
 
+  const goPrevRef = useRef<() => void>(() => {});
+  const goNextRef = useRef<() => void>(() => {});
+
   const goPrev = useCallback(() => {
     if (indexRef.current <= 0) return;
     setNavGen((g) => g + 1);
@@ -27,28 +30,31 @@ export default function Zine() {
   }, []);
 
   const goNext = useCallback(() => {
-    if (indexRef.current >= total - 1) return;
+    if (indexRef.current >= zinePages.length - 1) return;
     setNavGen((g) => g + 1);
     setHintVisible(false);
     setIndex((i) => i + 1);
-  }, [total]);
+  }, []);
+
+  goPrevRef.current = goPrev;
+  goNextRef.current = goNext;
 
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'ArrowRight' || e.key === ' ') {
-        if (indexRef.current >= total - 1) return;
+        if (indexRef.current >= zinePages.length - 1) return;
         e.preventDefault();
-        goNext();
+        goNextRef.current();
       }
       if (e.key === 'ArrowLeft') {
         if (indexRef.current <= 0) return;
         e.preventDefault();
-        goPrev();
+        goPrevRef.current();
       }
     };
     window.addEventListener('keydown', onKeyDown);
     return () => window.removeEventListener('keydown', onKeyDown);
-  }, [goNext, goPrev, total]);
+  }, []);
 
   useEffect(() => {
     const timer = window.setTimeout(() => setHintVisible(false), 5000);
