@@ -1,4 +1,11 @@
-export const resourceActions = [
+export type ResourceAction = {
+  id: 'toolbox' | 'learn-more' | 'references' | 'source-code';
+  label: string;
+  href: string;
+  external?: boolean;
+};
+
+export const resourceActions: readonly ResourceAction[] = [
   {
     id: 'toolbox',
     label: 'Toolbox',
