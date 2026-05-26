@@ -5,6 +5,117 @@ import { zinePages } from './spreads';
 import styles from './zine.module.css';
 import { ZineNav } from './ZineNav';
 
+function rand(min: number, max: number) {
+  return min + Math.random() * (max - min);
+}
+
+function easeInOutSine(t: number) {
+  return -(Math.cos(Math.PI * t) - 1) / 2;
+}
+
+function shortestDelta(from: number, to: number) {
+  return ((to - from + 540) % 360) - 180;
+}
+
+function MiniPanopticonBadge() {
+  const beamRef = useRef<SVGGElement>(null);
+  const svgRef = useRef<SVGSVGElement>(null);
+
+  useEffect(() => {
+    const beam = beamRef.current;
+    const svg = svgRef.current;
+    if (!beam || !svg) return;
+    const reduced =
+      typeof window.matchMedia === 'function' &&
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if (reduced) {
+      beam.setAttribute('transform', 'rotate(34 50 49)');
+      return;
+    }
+
+    const BASE_BEAM_ANGLE = 27.5;
+    const POINTER_FALLOFF_MS = 1200;
+
+    let currentAngle = rand(0, 360);
+    let targetAngle = currentAngle;
+    let lastPointerAt = 0;
+    let randomHoldUntil = performance.now() + rand(800, 2200);
+    let raf = 0;
+    let last = performance.now();
+
+    const updateTargetFromClient = (clientX: number, clientY: number) => {
+      const rect = svg.getBoundingClientRect();
+      const cx = rect.left + rect.width * 0.5;
+      const cy = rect.top + rect.height * 0.49;
+      const dx = clientX - cx;
+      const dy = clientY - cy;
+      targetAngle = (Math.atan2(dy, dx) * 180) / Math.PI - BASE_BEAM_ANGLE;
+      lastPointerAt = performance.now();
+    };
+
+    const onPointerMove = (e: PointerEvent) => {
+      updateTargetFromClient(e.clientX, e.clientY);
+    };
+
+    const onTouchStart = (e: TouchEvent) => {
+      const t = e.touches[0];
+      if (!t) return;
+      updateTargetFromClient(t.clientX, t.clientY);
+    };
+
+    const onTouchMove = (e: TouchEvent) => {
+      const t = e.touches[0];
+      if (!t) return;
+      updateTargetFromClient(t.clientX, t.clientY);
+    };
+
+    window.addEventListener('pointermove', onPointerMove, { passive: true });
+    window.addEventListener('touchstart', onTouchStart, { passive: true });
+    window.addEventListener('touchmove', onTouchMove, { passive: true });
+
+    const tick = (now: number) => {
+      const dt = Math.min((now - last) / 1000, 0.05);
+      last = now;
+
+      const pointerActive = now - lastPointerAt < POINTER_FALLOFF_MS;
+      if (!pointerActive && now >= randomHoldUntil) {
+        targetAngle = rand(0, 360);
+        randomHoldUntil = now + rand(1000, 3000);
+      }
+
+      const diff = shortestDelta(currentAngle, targetAngle);
+      const factor = pointerActive ? 8.5 : 3.6;
+      const t = easeInOutSine(Math.min(1, dt * factor));
+      currentAngle += diff * t;
+
+      beam.setAttribute('transform', `rotate(${currentAngle} 50 49)`);
+      raf = requestAnimationFrame(tick);
+    };
+
+    raf = requestAnimationFrame(tick);
+    return () => {
+      cancelAnimationFrame(raf);
+      window.removeEventListener('pointermove', onPointerMove);
+      window.removeEventListener('touchstart', onTouchStart);
+      window.removeEventListener('touchmove', onTouchMove);
+    };
+  }, []);
+
+  return (
+    <svg ref={svgRef} viewBox="0 0 100 100" className={styles.miniPanopticon} aria-hidden="true">
+      <ellipse cx="50" cy="34" rx="34" ry="10" className={styles.miniRing} />
+      <ellipse cx="50" cy="52" rx="39" ry="12" className={styles.miniRing} />
+      <ellipse cx="50" cy="72" rx="42" ry="14" className={styles.miniRing} />
+      <ellipse cx="50" cy="54" rx="10.5" ry="4.6" className={styles.miniTowerTop} />
+      <rect x="42.4" y="54" width="15.2" height="22" className={styles.miniTowerBody} />
+      <g ref={beamRef}>
+        <path d="M50 49 L81 65 L71 79 Z" className={styles.miniBeam} />
+      </g>
+    </svg>
+  );
+}
+
 export default function Zine() {
   const [index, setIndex] = useState(0);
   const [hintVisible, setHintVisible] = useState(true);
@@ -110,7 +221,9 @@ export default function Zine() {
                 <i />
               </span>
               <span className={styles.terminalPath}>~/versteckis/{page.id}.md</span>
-              <span className={styles.terminalState}>LIVE</span>
+              <span className={styles.terminalState}>
+                {page.id === 'cover' ? 'LIVE' : <MiniPanopticonBadge />}
+              </span>
             </div>
             <div key={`${page.id}-${navGen}`} className={styles.pageInner}>
               {page.content}

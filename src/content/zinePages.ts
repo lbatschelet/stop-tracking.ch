@@ -54,19 +54,13 @@ const panopticonPage: ZinePageDef = {
     {
       kind: 'p',
       lines: [
-        'In 1791, the philosopher Jeremy Bentham designed what he called the perfect prison: a circle of cells around a central watchtower. The guard in the tower can see every cell, but no prisoner can see into the tower.',
+        'In 1791, the philosopher Jeremy Bentham designed the perfect prison: a circle of cells around a central watchtower. The guard in the tower can see every cell, but no prisoner can see into the tower. Michel Foucault saw what this design actually achieves: it no longer matters whether the tower is occupied. The power of control shifts from the guard to the inmate\'s own mind.',
       ],
     },
     {
-      kind: 'p',
+      kind: 'callout',
       lines: [
-        'Michel Foucault saw what this design actually achieves: it no longer matters whether the tower is occupied. Prisoners who can never be sure begin to act as if they always are. The power of control shifts from the guard to the inmate\'s own mind.',
-      ],
-    },
-    {
-      kind: 'p',
-      lines: [
-        'Foucault called this the disciplinary society. We live in its next iteration, where the watchtower has been replaced by facial recognition cameras, behavioral data profiles, and algorithms. The result is the same: the harm is in what you stop doing, stop saying, stop organizing, because somewhere, invisibly, someone might be watching.',
+        'Foucault called this the disciplinary society. We live in its next iteration, where the watchtower has been replaced by facial recognition cameras, behavioral data profiles, and algorithms.',
       ],
     },
     {
@@ -79,7 +73,7 @@ const panopticonPage: ZinePageDef = {
 const introPage: ZinePageDef = {
   id: 'intro',
   blocks: [
-    { kind: 'h', lines: ['"I have nothing to hide."'] },
+    { kind: 'h', lines: ['"I have nothing to hide"'] },
     {
       kind: 'p',
       lines: [
@@ -89,23 +83,17 @@ const introPage: ZinePageDef = {
     {
       kind: 'p',
       lines: [
-        'Philosopher Slavoj Zizek distinguishes between subjective violence — a named act by an identifiable agent, like a police raid or an arrest — and two forms of objective violence that are harder to see. Symbolic violence operates through the categories systems use to sort people: who counts as a threat, who counts as a citizen, who counts as a body worth protecting. Systemic violence is the harm produced by normal social systems functioning as they were built to function: the violence of the "smooth functioning" of things.',
+        'Philosopher Slavoj Žižek distinguishes between subjective violence — a named act by an identifiable agent, like a police raid or an arrest — and two forms of objective violence that are harder to see. Symbolic violence operates through the categories systems use to sort people: who counts as a threat, who counts as a citizen, who counts as a body worth protecting. Systemic violence is the harm produced by normal social systems functioning as they were built to function: the violence of the "smooth functioning" of things.',
       ],
     },
     {
       kind: 'p',
       lines: [
-        'AI-powered state surveillance is a machinery of objective violence. It does not need you to do something wrong to produce harm. The harm is embedded in the infrastructure itself.',
+        'Bourdieu makes a parallel argument about the state. What makes state power so durable, he argues, is not primarily its capacity for force but the power to name who belongs and who does not.',
       ],
     },
     {
-      kind: 'p',
-      lines: [
-        'Bourdieu makes a parallel argument about the state: what makes state power so durable is not primarily its capacity for force, but its monopoly on legitimate classification — the power to name who belongs and who does not, who is suspicious and who is ordinary, who is legible to institutions and who exists in their margins.',
-      ],
-    },
-    {
-      kind: 'p',
+      kind: 'callout',
       lines: [
         'So, the question is not whether you have something to hide. It is who is made visible, to whom, and at what cost. The same data trail is unremarkable for one person and catastrophic for another: for someone seeking an abortion where it is banned, for someone leaving a violent partner, for a migrant without papers, for someone who organizes against power. Surveillance follows the lines a society has already drawn around gender, race, class, and status. It does not create those lines. It deepens them and makes them harder to cross.',
       ],
@@ -133,13 +121,13 @@ const case1Left: ZinePageDef = {
     {
       kind: 'p',
       lines: [
-        'Tracking your cycle can feel like an act of care: the app remembers what you would rather not have to, learns your rhythm, offers a quiet sense of authority over your own body. There is nothing naive about wanting that. What is easy to miss is that the data does not stay with you. Most cycle apps store everything on a company\'s servers: a record, in a place you will never see, of when you had sex, when a period was late, when a pregnancy began or ended. Information you wrote down as self-knowledge can be turned to use against you.',
+        'Tracking your cycle can feel like an act of care, so the app remembers what you would rather not have to, learns your rhythm, and offers a quiet sense of authority over your own body. There is nothing naive about wanting that. What is easy to miss is that the data does not stay with you. Information you wrote down as self-knowledge can be turned to use against you.',
       ],
     },
     {
-      kind: 'p',
+      kind: 'callout',
       lines: [
-        'This is the structure Zizek asks us to see beneath the individual prosecution. The subjective violence — the arrest, the charges — is visible and legible. The systemic violence beneath it is not. The state did not build a surveillance apparatus aimed at the body. It simply reached into the one corporations had already built.',
+        'This is the structure Žižek asks us to see beneath the individual prosecution. The subjective violence — the arrest, the charges — is visible and legible. The systemic violence beneath it is not. The state did not build a surveillance apparatus aimed at the body. It simply reached into the one corporations had already built.',
       ],
     },
     {
@@ -258,7 +246,7 @@ const case2Left: ZinePageDef = {
     {
       kind: 'p',
       lines: [
-        'The state\'s role here operates on two levels. First, it creates the legal environment in which this software is sold, lightly regulated, and rarely prosecuted. Second, when survivors seek help, they must navigate institutions — police, housing authorities, welfare offices — that routinely fail to recognize technological abuse as abuse. Gren and colleagues (2024), writing on bureaucratic violence, show that this institutional failure is not a gap or an oversight. The violence is in the delay, the disbelief, the form that asks the wrong questions.',
+        'The state\'s role here operates on two levels. First, it creates the legal environment in which this software is sold. Second, when survivors seek help, they must navigate institutions that routinely fail to recognize technological abuse as abuse.',
       ],
     },
     {
@@ -269,7 +257,7 @@ const case2Left: ZinePageDef = {
     },
     {
       kind: 'source',
-      text: '[Gren et al. (2024)](https://doi.org/10.25071/1920-7336.41163 "Gren, Nina, Abdelhady, Dalia, & Joormann, Martin. (2024). Unmasking the impact of bureaucratic violence. Refuge: Canada’s Journal on Refugees, 39(2), 1–13.")',
+      text: '[Gren et al. (2024)](https://doi.org/10.25071/1920-7336.41163 "Gren, Nina, Abdelhady, Dalia, & Joormann, Martin. (2024). Unmasking the impact of bureaucratic violence. Refuge: Canada’s Journal on Refugees, 39(2), 1–13."); [Coalition Against Stalkerware (n.d.)](https://stopstalkerware.org/information-for-media/ "Coalition Against Stalkerware. (n.d.). Information for media.")',
     },
   ],
 };
@@ -315,7 +303,7 @@ const case2Right: ZinePageDef = {
     },
     {
       kind: 'box',
-      title: 'What "open source" means, and why it is safer',
+      title: 'Open source software',
       blocks: [
         {
           kind: 'p',
@@ -348,9 +336,9 @@ const case3Left: ZinePageDef = {
     { kind: 'tag', variant: 'warm', text: 'CASE 03 · THE STATE', rec: true },
     { kind: 'h', lines: [['What it cannot seize, it ', hl('buys'), '.']] },
     {
-      kind: 'p',
+      kind: 'callout',
       lines: [
-        'The data from the first two cases — locations, health information, behavioral profiles, the exhaust of daily digital life — does not stay with the companies that collect it. It flows to *data brokers*, firms whose business model is purchasing and reselling personal information. Brokers sell to marketers, insurers, landlords, employers, and governments.',
+        'The data from the first two cases — locations, health information, behavioral profiles, the exhaust of daily digital life — does not stay with the companies that collect it. It flows to data brokers, firms whose business model is purchasing and reselling personal information. Brokers sell to marketers, insurers, landlords, employers, and governments.',
       ],
     },
     {
@@ -362,12 +350,12 @@ const case3Left: ZinePageDef = {
     {
       kind: 'p',
       lines: [
-        'Zizek\'s typology of violence is useful here because it describes harm with no identifiable perpetrator. The data broker operates legally. The government agency acts within its mandate. The corporation collected only what users agreed to provide. Taken individually, each step is unremarkable. Together they produce a surveillance infrastructure that lets the state classify, track, and act on populations — especially the most vulnerable — with minimal legal constraint and no single actor who can be held responsible. Simone Browne calls this *racializing surveillance*: the technology changes, but the logic of who gets watched does not.',
+        'Žižek\'s typology of violence is useful here because it describes harm with no identifiable perpetrator. The data broker operates legally. The government agency acts within its mandate. The corporation collected only what users agreed to provide. Taken individually, each step is unremarkable. Together they produce a surveillance infrastructure that lets the state classify, track, and act on populations — especially the most vulnerable — with minimal legal constraint and no single actor who can be held responsible. Simone Browne calls this *racializing surveillance*: the technology changes, but the logic of who gets watched does not.',
       ],
     },
     {
       kind: 'source',
-      text: '[Žižek (2008)](https://openlibrary.org/books/OL23092607M/Violence "Žižek, Slavoj. (2008). Violence: Six sideways reflections. Picador."); [Browne (2015)](https://www.dukeupress.edu/dark-matters "Browne, Simone. (2015). Dark matters: On the surveillance of blackness. Duke University Press.")',
+      text: '[Žižek (2008)](https://openlibrary.org/books/OL23092607M/Violence "Žižek, Slavoj. (2008). Violence: Six sideways reflections. Picador."); [Browne (2015)](https://www.dukeupress.edu/dark-matters "Browne, Simone. (2015). Dark matters: On the surveillance of blackness. Duke University Press."); [404 Media (n.d.)](https://www.404media.co/ "404 Media. (n.d.). Investigations on ICE, Palantir systems, and data-broker loopholes."); [Associated Press (2025)](https://apnews.com/ "Associated Press. (2025). Reporting on data-sharing between CMS and DHS/ICE.")',
     },
   ],
 };
@@ -460,7 +448,7 @@ const case4Left: ZinePageDef = {
     {
       kind: 'p',
       lines: [
-        'This is the case Zizek\'s framework was built for. The harm of the Fichenaffare was not located in any identifiable decision or agent. There was no villain who chose to destroy lives. There was a bureaucratic apparatus that classified people, an administrative logic that treated political difference as security risk, and citizens who had no knowledge it was happening. What Zizek calls systemic violence does not require bad intentions. It only requires a system oriented toward control.',
+        'This is the case Žižek\'s framework was built for. The harm of the Fichenaffäre was not located in any identifiable decision or agent. There was a bureaucratic apparatus that classified people, an administrative logic that treated political difference as security risk, and citizens who had no knowledge it was happening. What Žižek calls systemic violence does not require bad intentions. It only requires a system oriented toward control.',
       ],
     },
     {
@@ -471,7 +459,7 @@ const case4Left: ZinePageDef = {
     },
     {
       kind: 'source',
-      text: '[Žižek (2008)](https://openlibrary.org/books/OL23092607M/Violence "Žižek, Slavoj. (2008). Violence: Six sideways reflections. Picador."); [Browne (2015)](https://www.dukeupress.edu/dark-matters "Browne, Simone. (2015). Dark matters: On the surveillance of blackness. Duke University Press.")',
+      text: '[Žižek (2008)](https://openlibrary.org/books/OL23092607M/Violence "Žižek, Slavoj. (2008). Violence: Six sideways reflections. Picador."); [Browne (2015)](https://www.dukeupress.edu/dark-matters "Browne, Simone. (2015). Dark matters: On the surveillance of blackness. Duke University Press."); [Blick (2025)](https://www.blick.ch/politik/ "Blick. (2025, February 19). Reporting on covert surveillance of climate activists in Geneva."); [grundrechte.ch (n.d.)](https://grundrechte.ch/ "grundrechte.ch. (n.d.). From the fiche scandal to modern intelligence systems.")',
     },
   ],
 };
@@ -535,7 +523,7 @@ const case4Right: ZinePageDef = {
     },
     {
       kind: 'source',
-      text: '[Browne (2015)](https://www.dukeupress.edu/dark-matters "Browne, Simone. (2015). Dark matters: On the surveillance of blackness. Duke University Press.")',
+      text: '[Browne (2015)](https://www.dukeupress.edu/dark-matters "Browne, Simone. (2015). Dark matters: On the surveillance of blackness. Duke University Press."); [EFF (n.d.)](https://ssd.eff.org/ "Electronic Frontier Foundation. (n.d.). Surveillance self-defense.")',
     },
   ],
 };
@@ -556,11 +544,11 @@ const outroPage: ZinePageDef = {
     {
       kind: 'p',
       lines: [
-        'What this zine has described — data brokers, stalkerware, algorithms, classified files — are not aberrations. They are the routine operation of systems built to sort populations and handed new instruments for doing it. Zizek\'s point stands: subjective violence, the kind that makes the news, is only the visible surface of an objective violence harder to name because it does not belong to anyone in particular. The harm is in the infrastructure.',
+        'What this zine has described — data brokers, stalkerware, algorithms, classified files — are not aberrations. They are the routine operation of systems built to sort populations and handed new instruments for doing it. Žižek\'s point stands: subjective violence, the kind that makes the news, is only the visible surface of an objective violence harder to name because it does not belong to anyone in particular. The harm is in the infrastructure.',
       ],
     },
     {
-      kind: 'p',
+      kind: 'callout',
       lines: ['Three things worth remembering from this zine:'],
     },
     {
@@ -615,14 +603,26 @@ const escapePage: ZinePageDef = {
 };
 
 const referencesList = [
+  '404 Media. (n.d.). Investigations on ICE, Palantir systems, and data-broker loopholes. https://www.404media.co/',
+  'Amnesty International Switzerland. (n.d.). Materials on data retention and BUEPF. https://www.amnesty.ch/',
+  'Associated Press. (2025). Reporting on data-sharing between CMS and DHS/ICE. https://apnews.com/',
+  'Blick. (2025, February 19). Reporting on covert surveillance of climate activists in Geneva. https://www.blick.ch/politik/',
   'Bourdieu, Pierre, Wacquant, Loic Jean Dominique, & Farage, Samar. (1994). Rethinking the state: Genesis and structure of the bureaucratic field. *Sociological Theory, 12*(1), 1–18. https://doi.org/10.2307/202032',
   'Browne, Simone. (2015). *Dark matters: On the surveillance of blackness*. Duke University Press.',
+  'Coalition Against Stalkerware. (n.d.). *Information for media*. https://stopstalkerware.org/information-for-media/',
   'Dubrofsky, Rachel Evelyn, & Magnet, Shoshana Amielle (Eds.). (2015). *Feminist surveillance studies*. Duke University Press.',
+  'Electronic Frontier Foundation. (n.d.). *Surveillance self-defense*. https://ssd.eff.org/',
   'Federal Act on Data Protection (revFADP), SR 235.1 (2023). https://www.fedlex.admin.ch/eli/cc/2022/491/en',
   'Foucault, Michel. (1977). *Discipline and punish: The birth of the prison* (Alan Sheridan, Trans.). Pantheon Books.',
   'Gren, Nina, Abdelhady, Dalia, & Joormann, Martin. (2024). Unmasking the impact of bureaucratic violence. *Refuge: Canada’s Journal on Refugees, 39*(2), 1–13. https://doi.org/10.25071/1920-7336.41163',
+  'grundrechte.ch. (n.d.). *From the fiche scandal to modern intelligence systems*. https://grundrechte.ch/',
   'Kong, Lily. (2001). Mapping "new" geographies of religion: Politics and poetics in modernity. *Progress in Human Geography, 25*(2), 211–233. https://doi.org/10.1191/030913201678580485',
-  'Zizek, Slavoj. (2008). *Violence: Six sideways reflections*. Picador.',
+  'Mozilla Foundation. (2022). *Privacy not included: Reproductive health apps and wearables*. https://foundation.mozilla.org/en/privacynotincluded/',
+  'Privacy International. (2023). *All eyes on my period: Period tracking apps and the future of privacy in a post-Roe world*. https://privacyinternational.org/long-read/5593/all-eyes-my-period-period-tracking-apps-and-future-privacy-post-roe-world',
+  'required AG. (2024). *revFADP - New Swiss data protection law since September 1, 2023*. https://required.com/de/blog/revdsg-datenschutzgesetz/',
+  'Swiss Confederation. (2023). *Federal Act on Data Protection (FADP)* (Status as of September 1, 2023). Fedlex. https://www.fedlex.admin.ch/',
+  'Swiss Confederation. (n.d.). *Federal Act on the Surveillance of Post and Telecommunications (BUEPF)*. Fedlex. https://www.fedlex.admin.ch/',
+  'Žižek, Slavoj. (2008). *Violence: Six sideways reflections*. Picador.',
 ];
 
 // ---------- BACK ----------

@@ -10,9 +10,10 @@ import {
   Zb,
 } from '@/components/Zine/primitives';
 import { PanopticonVisual } from '@/components/Zine/PanopticonVisual';
+import { CitationLink } from '@/components/Zine/CitationLink';
 import { TypedBlock, blockTypesInstant } from '@/components/Zine/TypedBlock';
 import { TypewriterProvider } from '@/components/Zine/TypewriterContext';
-import { blockCharCount, linesCharCount } from '@/content/blockText';
+import { blockCharCount, linesCharCount, sourceVisibleText } from '@/content/blockText';
 import { orgLinks, toolkitLinks } from '@/data/toolkit';
 import type { Line, Run, Tone, ZineBlock, ZinePageDef } from './types';
 
@@ -171,12 +172,17 @@ function RunPiece({ piece }: { piece: RichPiece }) {
   if (typeof piece === 'string') return <>{piece}</>;
   if ('href' in piece) {
     const hasCite = typeof piece.title === 'string' && piece.title.length > 0;
+    if (hasCite) {
+      return (
+        <CitationLink href={piece.href} title={piece.title!}>
+          {piece.text}
+        </CitationLink>
+      );
+    }
     return (
       <a
-        className={[styles.inlineAutoLink, hasCite ? styles.inlineCiteLink : ''].filter(Boolean).join(' ')}
+        className={styles.inlineAutoLink}
         href={piece.href}
-        data-cite={hasCite ? piece.title : undefined}
-        aria-label={hasCite ? `${piece.text}. ${piece.title}` : undefined}
         target="_blank"
         rel="noopener noreferrer"
       >
@@ -471,20 +477,46 @@ function Block({
       );
     }
     case 'source':
+      if (limit !== undefined) {
+        const visible = sourceVisibleText(block.text);
+        if (limit < visible.length) {
+          return <p className={styles.source}>{visible.slice(0, limit)}</p>;
+        }
+      }
       return (
         <p className={styles.source}>
-          <RunSpan
-            run={limit === undefined ? block.text : block.text.slice(0, limit)}
-            plain={inReferences}
-          />
+          <RunSpan run={block.text} plain={inReferences} />
         </p>
       );
+    case 'callout': {
+      const title = block.title?.trim() ?? '';
+      const hasTitle = title.length > 0;
+      const titleLimit = limit === undefined ? title.length : Math.min(title.length, limit);
+      const bodyLimit =
+        limit === undefined
+          ? undefined
+          : hasTitle
+            ? limit > title.length + 1
+              ? limit - title.length - 1
+              : 0
+            : limit;
+      return (
+        <div className={styles.calloutBox}>
+          {hasTitle && <div className={styles.calloutHeader}>{title.slice(0, titleLimit)}</div>}
+          {(bodyLimit === undefined || bodyLimit > 0) && (
+            <p className={styles.calloutText}>
+              <Lines lines={block.lines} plain={inReferences} charLimit={bodyLimit} />
+            </p>
+          )}
+        </div>
+      );
+    }
     case 'safety': {
       const prefix = 'SAFETY · ';
       const lineLimit =
         limit === undefined ? undefined : limit > prefix.length ? limit - prefix.length : 0;
       return (
-        <div className={[styles.safety, styles.blockP].join(' ')}>
+        <div className={styles.safety}>
           {limit !== undefined && limit < prefix.length ? (
             prefix.slice(0, limit)
           ) : (
@@ -531,11 +563,14 @@ function Block({
     case 'bracket':
       return <Bracket position="top">{block.text}</Bracket>;
     case 'box':
+      const titleLimit = limit === undefined ? undefined : Math.min(limit, block.title.length);
       return (
         <details className={styles.box}>
           <summary className={styles.boxSummary}>
             <span className={styles.boxBracket} aria-hidden="true" />
-            <span className={styles.boxTitle}>{block.title}</span>
+            <span className={styles.boxTitle}>
+              {titleLimit === undefined ? block.title : block.title.slice(0, titleLimit)}
+            </span>
           </summary>
           <div
             className={[
@@ -581,15 +616,22 @@ export function WebPage({ page, side }: WebPageProps) {
       .join(' ');
 
   const inner = page.blocks.map((block, i) => (
+    (() => {
+      const instant =
+        blockTypesInstant(block) ||
+        (block.kind === 'box' && block.title.toLowerCase() === 'references');
+      return (
     <TypedBlock
       key={`${page.id}-${i}`}
       index={i}
       charTotal={blockCharCount(block)}
-      blockInstant={blockTypesInstant(block)}
+      blockInstant={instant}
       className={blockClass(block)}
     >
       {({ charLimit }) => <Block block={block} side={side} charLimit={charLimit} />}
     </TypedBlock>
+      );
+    })()
   ));
 
   const footer =

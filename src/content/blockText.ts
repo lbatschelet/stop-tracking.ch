@@ -12,6 +12,12 @@ export function linesCharCount(lines: Line[]): number {
   return lines.reduce((sum, line, i) => sum + lineLength(line) + (i > 0 ? 1 : 0), 0);
 }
 
+export function sourceVisibleText(text: string): string {
+  return text
+    .replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)(?:\s+"[^"]*")?\)/g, '$1')
+    .replace(/`([^`]+)`/g, '$1');
+}
+
 export function blockCharCount(block: ZineBlock): number {
   switch (block.kind) {
     case 'h':
@@ -30,7 +36,11 @@ export function blockCharCount(block: ZineBlock): number {
     case 'step':
       return block.lead.length + 1 + linesCharCount(block.body);
     case 'source':
-      return block.text.length;
+      return sourceVisibleText(block.text).length;
+    case 'callout': {
+      const titleLen = block.title?.trim().length ?? 0;
+      return linesCharCount(block.lines) + (titleLen > 0 ? titleLen + 1 : 0);
+    }
     case 'bottomline':
     case 'bracket':
       return block.text.length;
@@ -40,10 +50,7 @@ export function blockCharCount(block: ZineBlock): number {
         0,
       );
     case 'box':
-      return (
-        block.title.length +
-        block.blocks.reduce((sum, sub) => sum + blockCharCount(sub), 0)
-      );
+      return block.title.length;
     default:
       return 0;
   }
@@ -51,5 +58,5 @@ export function blockCharCount(block: ZineBlock): number {
 
 /** Blocks that appear instantly when their turn arrives (no char typing). */
 export function blockTypesInstant(block: ZineBlock): boolean {
-  return block.kind === 'cover' || block.kind === 'toolkit' || block.kind === 'box';
+  return block.kind === 'cover' || block.kind === 'toolkit';
 }

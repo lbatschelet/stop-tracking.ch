@@ -31,6 +31,7 @@ export type ZineBlock =
   | { kind: 'pull'; lines: Line[]; sub?: string; size?: 'normal' | 'big' }
   | { kind: 'step'; lead: string; body: Line[] }
   | { kind: 'source'; text: string }
+  | { kind: 'callout'; lines: Line[]; title?: string }
   | { kind: 'safety'; lines: Line[] }
   | { kind: 'cta'; lines: Line[] }
   | { kind: 'resourcebar'; items: { label: string; href?: string }[] }
