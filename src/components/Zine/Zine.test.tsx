@@ -16,7 +16,8 @@ describe('Zine', () => {
     render(<Zine />);
     fireEvent.click(screen.getByRole('button', { name: /next/i }));
     await waitFor(() => {
-      expect(screen.getByText(/The Panopticon/i)).toBeInTheDocument();
+      const matches = screen.getAllByText(/panopticon/i);
+      expect(matches.length).toBeGreaterThan(0);
     });
   });
 });

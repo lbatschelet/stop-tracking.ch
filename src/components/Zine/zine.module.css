@@ -169,8 +169,13 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .typeCursor {
+  .typeCursor,
+  .hlRed,
+  .cta::after {
     animation: none;
+  }
+  .redact {
+    transition: none;
   }
 }
 
@@ -189,19 +194,14 @@
 
 .pageLeft {
   background: var(--warm-bg);
-  border: 1px solid var(--warm-border);
-  border-right: none;
 }
 
 .pageRight {
   background: var(--cool-bg);
-  border: 1px solid var(--cool-border);
-  border-left: 1px dashed #3a3a3a;
 }
 
 .pageAlone {
   background: var(--warm-bg);
-  border: 1px solid #2a2a2a;
 }
 
 .zineLink {
@@ -236,11 +236,23 @@
 }
 
 .zh {
-  font-size: clamp(17px, 2.1vw, 24px);
-  line-height: 1.2;
+  font-size: clamp(18px, 2.25vw, 26px);
+  line-height: 1.18;
   font-weight: 700;
-  margin-bottom: 14px;
+  margin-bottom: 18px;
   text-wrap: balance;
+  position: relative;
+}
+
+/* Subtle accent rule under every headline — inherits the headline colour. */
+.zh::after {
+  content: '';
+  display: block;
+  width: 2em;
+  height: 2px;
+  margin-top: 8px;
+  background: currentColor;
+  opacity: 0.42;
 }
 
 .pageLeft .zh {
@@ -312,13 +324,37 @@
   padding: 0 4px;
   border-radius: 1px;
   user-select: none;
+  cursor: help;
+  transition: background 0.35s ease, color 0.35s ease;
+}
+
+/* The metaphor made interactive: hover de-redacts. */
+.redact:hover,
+.redact:focus-visible {
+  background: transparent;
+  color: var(--amber);
+  user-select: text;
 }
 
 .hlRed {
   background: var(--red);
   color: var(--warm-bg);
-  padding: 0 2px;
+  padding: 0 4px;
+  font-weight: 700;
   box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+  animation: hlRedPulse 2.8s ease-in-out infinite;
+}
+
+@keyframes hlRedPulse {
+  0%, 100% {
+    filter: brightness(1);
+    box-shadow: 0 0 0 0 rgba(226, 91, 74, 0);
+  }
+  50% {
+    filter: brightness(1.16);
+    box-shadow: 0 0 0 2px rgba(226, 91, 74, 0.18);
+  }
 }
 
 .rec {
@@ -512,6 +548,49 @@
   text-decoration: none;
 }
 
+.inlineCiteLink {
+  position: relative;
+}
+
+.inlineCiteLink::after {
+  content: attr(data-cite);
+  position: absolute;
+  left: 0;
+  bottom: calc(100% + 8px);
+  z-index: 25;
+  width: clamp(220px, 34vw, 460px);
+  padding: 7px 9px;
+  border: 1px solid #2f3b33;
+  border-radius: 3px;
+  background: rgba(11, 11, 11, 0.98);
+  color: #c8c8c8;
+  font-size: clamp(9px, 0.8vw, 10px);
+  line-height: 1.35;
+  letter-spacing: 0.01em;
+  font-style: normal;
+  text-wrap: pretty;
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.48);
+  opacity: 0;
+  transform: translateY(3px);
+  pointer-events: none;
+  transition:
+    opacity 100ms ease-out,
+    transform 100ms ease-out;
+  transition-delay: 90ms;
+}
+
+.inlineCiteLink:hover::after,
+.inlineCiteLink:focus-visible::after {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (max-width: 720px) {
+  .inlineCiteLink::after {
+    display: none;
+  }
+}
+
 .kwDanger {
   color: #ff7b72;
 }
@@ -549,6 +628,13 @@
   border-top: 1px solid var(--warm-border);
 }
 
+.source::before {
+  content: '// ';
+  font-style: normal;
+  color: var(--dim);
+  opacity: 0.65;
+}
+
 .pageRight .source {
   border-top-color: var(--cool-border);
 }
@@ -578,6 +664,18 @@
   font-weight: 700;
   margin: 20px 0 16px;
   text-wrap: balance;
+}
+
+/* The CTA gets a blinking terminal cursor at the end — invites the reader
+   to do the thing the line just asked them to do. */
+.cta::after {
+  content: '▮';
+  display: inline-block;
+  margin-left: 10px;
+  color: var(--green);
+  vertical-align: -2px;
+  font-weight: 400;
+  animation: blink 1.1s steps(1) infinite;
 }
 
 /* Resource bar on the final right page. */

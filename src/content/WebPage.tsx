@@ -33,7 +33,7 @@ type RichPiece =
   | string
   | { text: string; tone: Tone }
   | { text: string; className: string }
-  | { text: string; href: string };
+  | { text: string; href: string; title?: string };
 
 const dangerWords = new Set([
   'surveillance',
@@ -135,13 +135,17 @@ function highlightKeywords(s: string): RichPiece[] {
 
 function parseInline(s: string): RichPiece[] {
   const out: RichPiece[] = [];
-  const codeRe = /`([^`]+)`/g;
+  const tokenRe = /`([^`]+)`|\[([^\]]+)\]\((https?:\/\/[^\s)]+)(?:\s+"([^"]+)")?\)/g;
   let last = 0;
   let m: RegExpExecArray | null;
-  while ((m = codeRe.exec(s)) !== null) {
+  while ((m = tokenRe.exec(s)) !== null) {
     if (m.index > last) out.push(...highlightKeywords(s.slice(last, m.index)));
-    out.push({ text: m[1], className: styles.inlineCode });
-    last = codeRe.lastIndex;
+    if (m[1] !== undefined) {
+      out.push({ text: m[1], className: styles.inlineCode });
+    } else {
+      out.push({ text: m[2], href: m[3], title: m[4] });
+    }
+    last = tokenRe.lastIndex;
   }
   if (last < s.length) out.push(...highlightKeywords(s.slice(last)));
   return out.length === 0 ? [s] : out;
@@ -166,8 +170,16 @@ function linkify(s: string): RichPiece[] {
 function RunPiece({ piece }: { piece: RichPiece }) {
   if (typeof piece === 'string') return <>{piece}</>;
   if ('href' in piece) {
+    const hasCite = typeof piece.title === 'string' && piece.title.length > 0;
     return (
-      <a className={styles.inlineAutoLink} href={piece.href} target="_blank" rel="noopener noreferrer">
+      <a
+        className={[styles.inlineAutoLink, hasCite ? styles.inlineCiteLink : ''].filter(Boolean).join(' ')}
+        href={piece.href}
+        data-cite={hasCite ? piece.title : undefined}
+        aria-label={hasCite ? `${piece.text}. ${piece.title}` : undefined}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
         {piece.text}
       </a>
     );

@@ -1,12 +1,33 @@
-import type { ZinePageDef, ZineSpreadDef } from './types';
+import type { Run, Tone, ZinePageDef, ZineSpreadDef } from './types';
 
 /**
  * The whole zine, as data.
  *
- * Plain string lines auto-parse **bold** and *italic* markdown. For colour
- * highlights, use Run arrays (rarely needed in v4 — the prose carries the
- * weight). Boxes are collapsible on web, always expanded in print/PDF.
+ * Plain string lines auto-parse **bold** and *italic* markdown, plus an
+ * automatic keyword colouriser for body prose. For *deliberate* highlights
+ * — especially in titles — use the Run helpers below. They bypass the
+ * auto-colouriser and stake out the dramatic, content-specific accents.
+ *
+ *   hl()      → red box behind the word (use on the THREAT noun in each
+ *               case-LEFT title; do not over-use elsewhere)
+ *   w / a / r / g / c / d → white / amber / red / green / cyan / dim runs
+ *   redact()  → █████ censor bar (use to make a metaphor active)
  */
+
+const mk = (tone: Tone) => (text: string): Run => ({ text, tone });
+const w = mk('white');
+const a = mk('amber');
+const r = mk('red');
+const g = mk('green');
+const c = mk('cyan');
+const d = mk('dim');
+const hl = mk('hlRed');
+const redact = (n = 8): Run => ({ text: '█'.repeat(n), tone: 'redact' });
+
+// silence "unused" warnings — keep the helpers exposed for future content
+void c;
+void d;
+void redact;
 
 // ---------- COVER ----------
 
@@ -23,18 +44,34 @@ const panopticonPage: ZinePageDef = {
   id: 'panopticon',
   vCenter: true,
   blocks: [
-    { kind: 'h', lines: ['The Panopticon'] },
+    { kind: 'h', lines: [[g('<'), 'panopticon', g('>')]] },
     {
       kind: 'p',
       lines: [
-        'In 1791, the philosopher Jeremy Bentham drew up a design for the perfect prison: a ring of cells around a single watchtower. From the tower, a guard can see into every cell, but no prisoner can see into the tower. They never know *when* they are being watched — only that they always *might* be.',
+        'States harm people in many ways — through prisons, borders, poverty, war. But some of the most effective state harm leaves no visible wounds. It works by making you uncertain whether you are being watched, and letting that uncertainty do the rest.',
       ],
     },
     {
       kind: 'p',
       lines: [
-        'Two centuries later, Michel Foucault saw what that design really does. After a while, the guard becomes unnecessary. Never sure whether anyone is looking, the prisoners begin to act as if someone always is. They watch themselves. Power stops being something done to them and becomes something they do to themselves.',
+        'In 1791, the philosopher Jeremy Bentham designed what he called the perfect prison: a circle of cells around a central watchtower. The guard in the tower can see every cell, but no prisoner can see into the tower.',
       ],
+    },
+    {
+      kind: 'p',
+      lines: [
+        'Michel Foucault saw what this design actually achieves: it no longer matters whether the tower is occupied. Prisoners who can never be sure begin to act as if they always are. The power of control shifts from the guard to the inmate\'s own mind.',
+      ],
+    },
+    {
+      kind: 'p',
+      lines: [
+        'Foucault called this the disciplinary society. We live in its next iteration, where the watchtower has been replaced by facial recognition cameras, behavioral data profiles, and algorithms. The result is the same: the harm is in what you stop doing, stop saying, stop organizing, because somewhere, invisibly, someone might be watching.',
+      ],
+    },
+    {
+      kind: 'source',
+      text: '[Foucault (1977)](https://en.wikipedia.org/wiki/Discipline_and_Punish "Foucault, Michel. (1977). Discipline and punish: The birth of the prison (A. Sheridan, Trans.). Pantheon Books.")',
     },
   ],
 };
@@ -46,20 +83,36 @@ const introPage: ZinePageDef = {
     {
       kind: 'p',
       lines: [
-        'The sentence sounds harmless, and it usually ends the conversation. But it hides an assumption: that surveillance only matters if you have done something wrong. That is exactly the tower\'s logic — and it has never been true.',
+        'This sentence is the most effective thing surveillance has ever produced: not the files, not the arrests, but the belief that being watched only matters if you have done something wrong. That belief is the tower of the panopticon working exactly as designed.',
       ],
     },
     {
       kind: 'p',
       lines: [
-        'Being watched has never depended on guilt. It depends on who you are. The same data trail is harmless for one person and dangerous for another: for someone seeking an abortion where it is banned, for someone leaving a violent partner, for someone without the right papers, for someone who organizes against power. Surveillance follows the lines a society has already drawn — around gender, race, class, and status — and deepens them.',
+        'Philosopher Slavoj Zizek distinguishes between subjective violence — a named act by an identifiable agent, like a police raid or an arrest — and two forms of objective violence that are harder to see. Symbolic violence operates through the categories systems use to sort people: who counts as a threat, who counts as a citizen, who counts as a body worth protecting. Systemic violence is the harm produced by normal social systems functioning as they were built to function: the violence of the "smooth functioning" of things.',
       ],
     },
     {
       kind: 'p',
       lines: [
-        'So the useful question is not whether you have something to hide. It is who is made visible, to whom, and at what cost.',
+        'AI-powered state surveillance is a machinery of objective violence. It does not need you to do something wrong to produce harm. The harm is embedded in the infrastructure itself.',
       ],
+    },
+    {
+      kind: 'p',
+      lines: [
+        'Bourdieu makes a parallel argument about the state: what makes state power so durable is not primarily its capacity for force, but its monopoly on legitimate classification — the power to name who belongs and who does not, who is suspicious and who is ordinary, who is legible to institutions and who exists in their margins.',
+      ],
+    },
+    {
+      kind: 'p',
+      lines: [
+        'So, the question is not whether you have something to hide. It is who is made visible, to whom, and at what cost. The same data trail is unremarkable for one person and catastrophic for another: for someone seeking an abortion where it is banned, for someone leaving a violent partner, for a migrant without papers, for someone who organizes against power. Surveillance follows the lines a society has already drawn around gender, race, class, and status. It does not create those lines. It deepens them and makes them harder to cross.',
+      ],
+    },
+    {
+      kind: 'source',
+      text: '[Žižek (2008)](https://openlibrary.org/books/OL23092607M/Violence "Žižek, Slavoj. (2008). Violence: Six sideways reflections. Picador."); [Bourdieu et al. (1994)](https://doi.org/10.2307/202032 "Bourdieu, Pierre, Wacquant, Loic J. D., & Farage, Samar. (1994). Rethinking the state: Genesis and structure of the bureaucratic field. Sociological Theory, 12(1), 1–18.")',
     },
   ],
 };
@@ -70,7 +123,7 @@ const case1Left: ZinePageDef = {
   id: 'case01-left',
   blocks: [
     { kind: 'tag', variant: 'warm', text: 'CASE 01 · THE BODY', rec: true },
-    { kind: 'h', lines: ['Her period tracker became evidence.'] },
+    { kind: 'h', lines: [['Her period tracker became ', w('evidence'), '.']] },
     {
       kind: 'p',
       lines: [
@@ -80,18 +133,24 @@ const case1Left: ZinePageDef = {
     {
       kind: 'p',
       lines: [
-        'Tracking your cycle can feel like an act of care — the app remembers what you would rather not have to, learns your rhythm, offers a quiet sense of authority over your own body. There is nothing naïve about wanting that. What is easy to miss is that the data does not stay with you. Most cycle apps keep everything on a company\'s servers: a record, in a place you will never see, of when you had sex, when a period was late, when a pregnancy began or ended. Information you wrote down as self-knowledge becomes something held *about* you — and, when the law turns, used *against* you.',
+        'Tracking your cycle can feel like an act of care: the app remembers what you would rather not have to, learns your rhythm, offers a quiet sense of authority over your own body. There is nothing naive about wanting that. What is easy to miss is that the data does not stay with you. Most cycle apps store everything on a company\'s servers: a record, in a place you will never see, of when you had sex, when a period was late, when a pregnancy began or ended. Information you wrote down as self-knowledge can be turned to use against you.',
       ],
     },
     {
       kind: 'p',
       lines: [
-        'This is not new. Feminist scholars like Rachel Dubrofsky and Shoshana Magnet have shown that the female body, the queer body, the racialized body have always been watched more closely than others. Controlling reproduction is one of the oldest forms of surveillance there is. What has changed is only the instrument: now it is an app.',
+        'This is the structure Zizek asks us to see beneath the individual prosecution. The subjective violence — the arrest, the charges — is visible and legible. The systemic violence beneath it is not. The state did not build a surveillance apparatus aimed at the body. It simply reached into the one corporations had already built.',
+      ],
+    },
+    {
+      kind: 'p',
+      lines: [
+        'Feminist scholars like Rachel Dubrofsky and Shoshana Magnet have long shown that the female body, the queer body, the racialized body have always been watched more closely than others. Controlling reproduction is one of the oldest forms of surveillance there is. What has changed is not the logic but the instrument, and an instrument that feels like self-care is far harder to refuse.',
       ],
     },
     {
       kind: 'source',
-      text: 'Privacy International, *All Eyes on my Period* (2023); Mozilla, *Privacy Not Included* (2022).',
+      text: '[Žižek (2008)](https://openlibrary.org/books/OL23092607M/Violence "Žižek, Slavoj. (2008). Violence: Six sideways reflections. Picador."); [Dubrofsky & Magnet (2015)](https://www.dukeupress.edu/feminist-surveillance-studies "Dubrofsky, Rachel Evelyn, & Magnet, Shoshana Amielle (Eds.). (2015). Feminist surveillance studies. Duke University Press.")',
     },
   ],
 };
@@ -100,11 +159,11 @@ const case1Right: ZinePageDef = {
   id: 'case01-right',
   blocks: [
     { kind: 'tag', variant: 'cool', text: 'LEVEL 1 · FIVE MINUTES · [▓░░░]' },
-    { kind: 'h', lines: ['Give away less, starting today.'] },
+    { kind: 'h', lines: [['Give away ', a('less'), ', starting today.']] },
     {
       kind: 'p',
       lines: [
-        'None of this asks you to change how you live. These are the smallest possible steps, and each one quietly starves the machine that profiles you.',
+        'The data economy requires your participation to function. Not your consent — your participation. The more data generated about you, the more complete the profile, the more useful you are to whoever buys it. The steps below are small, but they are acts of resistance.',
       ],
     },
     {
@@ -118,20 +177,20 @@ const case1Right: ZinePageDef = {
       kind: 'step',
       lead: 'Block the trackers in your browser.',
       body: [
-        '*uBlock Origin* (free, open source) stops the invisible scripts that record what you read and search, including health questions. It is not about hiding ads; it is about the profile being built behind the page.',
+        '*uBlock Origin* (free, open source) stops the invisible scripts that record what you read and search, including health questions you never intended to share. It is not about hiding ads. It is about declining to generate the profile others make for you.',
       ],
     },
     {
       kind: 'step',
       lead: 'Change your search engine.',
       body: [
-        '*DuckDuckGo* does not keep a history of what you look up. For anything to do with your body, that difference matters.',
+        '*DuckDuckGo* and *Startpage* do not retain identifiable histories of your queries. For anything to do with your body, your politics, or your relationships, that difference matters.',
       ],
     },
     {
       kind: 'p',
       lines: [
-        'None of this makes you invisible — but it sharply cuts how much is gathered about you, and from how many directions at once.',
+        'None of this makes you invisible. But invisibility was never the goal. The goal is to be less useful to systems that were not built with your interests in mind.',
       ],
     },
     {
@@ -147,7 +206,7 @@ const case1Right: ZinePageDef = {
         {
           kind: 'p',
           lines: [
-            '**The weak side.** Since September 2023, the revised data law (revDSG) lets you ask a company what it holds on you and demand deletion. But where the EU fines a *company* up to €20 million, Switzerland fines a responsible *person* up to 250,000 CHF — pocket change for a tech giant — and lets firms process your data by default, leaving you to object after the fact. A company that harvests your data here has little to fear. That gap is not an oversight; it is a political choice. *That* is state harm: not what the state does, but what it allows.',
+            '**The weak side.** Since September 2023, the revised data law (revDSG) lets you ask a company what it holds on you and demand deletion. But where the EU fines a *company* up to EUR 20 million, Switzerland fines a responsible *person* up to 250,000 CHF — pocket change for a tech giant — and lets firms process your data by default, leaving you to object after the fact. A company that harvests your data here has little to fear. That gap is not an oversight; it is a political choice. *That* is state harm: not what the state does, but what it allows.',
           ],
         },
         {
@@ -162,7 +221,17 @@ const case1Right: ZinePageDef = {
             '**The catch.** No paradise: Switzerland runs its own mass data retention (Case 4), and in 2025 Proton began moving servers abroad to stay ahead of a proposed new surveillance law. Shielded from the foreign state, exposed to the home one — both at once.',
           ],
         },
+        {
+          kind: 'p',
+          lines: [
+            '**A note on Proton.** *Proton* appears throughout this zine — for mail, VPN, passwords. Its record is solid and its Swiss base matters. But it is still a for-profit company, not a foundation: a small number of people ultimately set its direction, and no political structure holds them there. Worth using; worth not depending on alone.',
+          ],
+        },
       ],
+    },
+    {
+      kind: 'source',
+      text: '[revFADP (2023)](https://www.fedlex.admin.ch/eli/cc/2022/491/en "Federal Act on Data Protection (revFADP), SR 235.1 (2023).")',
     },
   ],
 };
@@ -173,23 +242,23 @@ const case2Left: ZinePageDef = {
   id: 'case02-left',
   blocks: [
     { kind: 'tag', variant: 'warm', text: 'CASE 02 · THE PARTNER', rec: true },
-    { kind: 'h', lines: ['The watcher in the house.'] },
+    { kind: 'h', lines: [['The ', r('watcher'), ' in the house.']] },
     {
       kind: 'p',
       lines: [
-        'Not everyone who tracks you is a company or a government. Sometimes it is the person who knows your passwords, sleeps beside you, and has reason to want to know where you are.',
+        'Not every surveillance apparatus belongs to a government. Sometimes it belongs to the person who knows your passwords, shares your bed, and has reasons to want to know where you are at every moment.',
       ],
     },
     {
       kind: 'p',
       lines: [
-        'There is a category of apps built for exactly this. They are sold as "child safety" or "employee monitoring," but what they do is let one person secretly read another\'s messages, hear through their microphone, and follow their location in real time. The software hides itself — no icon, nothing in the app list — so the person being watched often realizes only when their partner knows something they could not otherwise know. Researchers and shelters call this *stalkerware*, and in one survey three out of four domestic-violence shelters reported clients who had been tracked this way. The targets are overwhelmingly women.',
+        'There is a category of apps built for exactly this. They are marketed as "child safety" or "employee monitoring" tools, but what they do is allow one person to secretly read another\'s messages, listen through their microphone, and track their real-time location. Researchers and domestic-violence shelters call this *stalkerware*, and in one survey three in four shelters reported clients who had been tracked this way. The targets are overwhelmingly women.',
       ],
     },
     {
       kind: 'p',
       lines: [
-        'Surveillance inside a relationship is not really a technical problem; it is an old one wearing new tools. The demand to know *where were you, who were you with* becomes an app running silently in a pocket. It is the logic of control that feminists have named for decades — coercion that does not need to raise a hand, only to watch.',
+        'The state\'s role here operates on two levels. First, it creates the legal environment in which this software is sold, lightly regulated, and rarely prosecuted. Second, when survivors seek help, they must navigate institutions — police, housing authorities, welfare offices — that routinely fail to recognize technological abuse as abuse. Gren and colleagues (2024), writing on bureaucratic violence, show that this institutional failure is not a gap or an oversight. The violence is in the delay, the disbelief, the form that asks the wrong questions.',
       ],
     },
     {
@@ -200,7 +269,7 @@ const case2Left: ZinePageDef = {
     },
     {
       kind: 'source',
-      text: 'Coalition Against Stalkerware; NPR (2014); Kaspersky (2023).',
+      text: '[Gren et al. (2024)](https://doi.org/10.25071/1920-7336.41163 "Gren, Nina, Abdelhady, Dalia, & Joormann, Martin. (2024). Unmasking the impact of bureaucratic violence. Refuge: Canada’s Journal on Refugees, 39(2), 1–13.")',
     },
   ],
 };
@@ -209,39 +278,39 @@ const case2Right: ZinePageDef = {
   id: 'case02-right',
   blocks: [
     { kind: 'tag', variant: 'cool', text: 'LEVEL 2 · ONE AFTERNOON · [▓▓░░]' },
-    { kind: 'h', lines: ['Take the device back.'] },
+    { kind: 'h', lines: [['Take the device ', a('back'), '.']] },
     {
       kind: 'p',
       lines: [
-        'A phone should answer to you and no one else. These steps put distance between you and anyone reading along — whether that is a company or a person in your own home.',
+        'The defaults on most devices are set in the interests of the manufacturer and the companies that pay them. Changing them is not paranoia. It is the minimum act of deciding that a device you own should work for you.',
       ],
     },
     {
       kind: 'step',
       lead: 'Check what your apps can reach.',
       body: [
-        'In settings, look at which apps have your location, microphone, and camera. Most do not need them; switch those off. An app you do not remember installing is a warning worth taking seriously.',
+        'In settings, look at which apps have access to your location, microphone, and camera. Most do not need them to function. Switch off what is not necessary. An app you do not remember installing is a warning worth taking seriously.',
       ],
     },
     {
       kind: 'step',
       lead: 'Lock the way in.',
       body: [
-        'Use a long passcode rather than a four-digit PIN, known to you alone. On shared Apple or Google accounts, set your own password and turn on two-factor login.',
+        'Use a long passcode rather than a four-digit PIN. On any shared Apple or Google account, create your own password and enable two-factor authentication. What cannot be opened cannot be read.',
       ],
     },
     {
       kind: 'step',
       lead: 'Prefer software you can actually inspect.',
       body: [
-        'Programs whose code is open can be checked by anyone (see box). For messages, *Signal* is both encrypted end to end and open to inspection.',
+        'Open-source code is public, meaning anyone can read it and check it for hidden functions. For messages, *Signal* is both end-to-end encrypted and open source, so its promises can be verified.',
       ],
     },
     {
       kind: 'step',
       lead: 'If you suspect stalkerware, get help from outside.',
       body: [
-        'Removing it can alert the person who installed it, so it is safer to plan that step with a support service than to do it alone.',
+        'Removing it yourself can alert the person who installed it. Plan that step with a support service, not alone.',
       ],
     },
     {
@@ -277,28 +346,28 @@ const case3Left: ZinePageDef = {
   id: 'case03-left',
   blocks: [
     { kind: 'tag', variant: 'warm', text: 'CASE 03 · THE STATE', rec: true },
-    { kind: 'h', lines: ['What it cannot seize, it buys.'] },
+    { kind: 'h', lines: [['What it cannot seize, it ', hl('buys'), '.']] },
     {
       kind: 'p',
       lines: [
-        'The data from the first two cases — locations, profiles, the exhaust of everyday apps — does not stay with the companies that collect it. It is sold on to *data brokers*, firms whose entire business is buying and reselling personal information. And brokers sell to anyone who pays, including governments.',
+        'The data from the first two cases — locations, health information, behavioral profiles, the exhaust of daily digital life — does not stay with the companies that collect it. It flows to *data brokers*, firms whose business model is purchasing and reselling personal information. Brokers sell to marketers, insurers, landlords, employers, and governments.',
       ],
     },
     {
       kind: 'p',
       lines: [
-        'This is the loophole. A constitution may forbid the state from *seizing* your data without a judge\'s order, but it says nothing about the state simply *buying* the same data on the open market. In the United States, the immigration agency ICE has used exactly this to trace people across whole neighborhoods without ever going before a court: a phone that rests somewhere each night is read as a home, the place it spends each day as a workplace.',
+        'This is the legal loophole that makes the harm complete. A constitution may forbid the state from seizing your data without a court order. It says nothing about the state buying the same data on the open market. In the United States, the immigration agency ICE has used purchased location data to trace people across entire neighborhoods without ever appearing before a judge: a phone that rests somewhere each night is read as a home, the place it spends daylight hours as a workplace.',
       ],
     },
     {
       kind: 'p',
       lines: [
-        'It does not fall on everyone alike. It concentrates on particular communities — migrants, and people of color above all. The scholar Simone Browne calls this *racializing surveillance*: watching that sorts people by race and fixes who is judged to belong and who is treated as out of place. Browne traces an unbroken line from the branding of enslaved people and the lantern laws that forced Black people to carry a light after dark, through to today\'s biometric scans. The technology keeps changing; the logic of who gets watched does not.',
+        'Zizek\'s typology of violence is useful here because it describes harm with no identifiable perpetrator. The data broker operates legally. The government agency acts within its mandate. The corporation collected only what users agreed to provide. Taken individually, each step is unremarkable. Together they produce a surveillance infrastructure that lets the state classify, track, and act on populations — especially the most vulnerable — with minimal legal constraint and no single actor who can be held responsible. Simone Browne calls this *racializing surveillance*: the technology changes, but the logic of who gets watched does not.',
       ],
     },
     {
       kind: 'source',
-      text: 'Simone Browne, *Dark Matters* (2015); reporting by 404 Media, Wired, AP.',
+      text: '[Žižek (2008)](https://openlibrary.org/books/OL23092607M/Violence "Žižek, Slavoj. (2008). Violence: Six sideways reflections. Picador."); [Browne (2015)](https://www.dukeupress.edu/dark-matters "Browne, Simone. (2015). Dark matters: On the surveillance of blackness. Duke University Press.")',
     },
   ],
 };
@@ -307,39 +376,39 @@ const case3Right: ZinePageDef = {
   id: 'case03-right',
   blocks: [
     { kind: 'tag', variant: 'cool', text: 'LEVEL 3 · A FEW WEEKENDS · [▓▓▓░]' },
-    { kind: 'h', lines: ['Leave fewer traces.'] },
+    { kind: 'h', lines: [['Leave ', a('fewer'), ' traces.']] },
     {
       kind: 'p',
       lines: [
-        'This level is about producing less of the data that brokers and agencies feed on. It takes a little more effort, but it can be done one piece at a time.',
+        'Bourdieu describes state power in terms of informational capital: knowledge about a population that allows it to classify, sort, and govern. Data brokers are the private-market version of the same thing. Level 3 is about withdrawing from that economy one piece at a time.',
       ],
     },
     {
       kind: 'step',
       lead: 'Turn off your location history.',
       body: [
-        'Switch off the Timeline in Google Maps, then go into your phone\'s settings and check which apps can reach your location at all — many keep tracking in the background, long after you have closed them.',
+        'Disable the Timeline in Google Maps, then go into your phone settings and audit which apps can access your location at all, because many keep tracking in the background long after you have stopped using them.',
       ],
     },
     {
       kind: 'step',
       lead: 'Use a VPN.',
       body: [
-        'It hides your IP address, and with it part of your location. Choose a trustworthy paid provider rather than a free one, since free VPNs often earn their money by selling the very data they promise to protect. (Case 4\'s box explains what a VPN does and does not do.)',
+        'It hides your IP address, and with it your approximate location and browsing habits from your internet provider. Choose a paid provider with a verified no-logs policy, because free VPNs routinely earn their money by selling the data they claim to protect.',
       ],
     },
     {
       kind: 'step',
-      lead: 'Leave Google gradually.',
+      lead: 'Move away from Google gradually.',
       body: [
-        'Move your email to a privacy-minded provider such as *Proton Mail*, your maps to an *OpenStreetMap*-based app — one service at a time, not all at once.',
+        'Replace your email with a privacy-respecting provider like *Proton Mail*, your maps with an *OpenStreetMap*-based app. One service at a time already makes a huge difference, because trying to do everything at once is how people give up.',
       ],
     },
     {
       kind: 'step',
       lead: 'Keep your identities apart.',
       body: [
-        'When a single email address is the key to everything, one leak opens your whole life. Keep separate addresses for officialdom, for shopping, for friends; an alias service like *SimpleLogin* makes that practical, and a password manager makes it survivable.',
+        'A single email address linked to everything means a single point of exposure. Separate addresses for institutions, shopping, and personal life — maintained with an alias service like *SimpleLogin* — limit how much damage any single leak can do.',
       ],
     },
     {
@@ -379,24 +448,30 @@ const case4Left: ZinePageDef = {
     {
       kind: 'p',
       lines: [
-        'In 2023, a climate activist in Geneva sprayed paint on a cycle path. It triggered a surveillance operation far larger than the act — and he only learned of it two years later. Since then he has changed how he lives: at meetings he leaves his phone and laptop in a locker. *You never know*, he says.',
+        'In 2023, a climate activist in Geneva sprayed paint on a cycle path. It triggered a surveillance operation far larger than the act, which he only learned about two years later. Since then, he has changed how he lives: at meetings he leaves his phone and laptop in a locker. *You never know*, he says.',
       ],
     },
     {
       kind: 'p',
       lines: [
-        'That sentence is the whole mechanism. Surveillance does not have to catch you to work on you. It is enough to know that it could be there, and you begin to edit yourself — to skip the meeting, soften the post, stay home. This is the *chilling effect*, and it falls hardest on the people a democracy most needs: the ones willing to disagree. Switzerland knows the pattern well. When it came out in 1989 that the state had kept secret files on hundreds of thousands of people — trade unionists, peace and anti-nuclear campaigners, the women\'s movement, anyone deemed "nonconformist" — it set off the largest protest in the country\'s postwar history.',
+        'That sentence is the whole mechanism. Surveillance does not have to catch you to work on you. It is enough to know that it could be there, and you begin to edit yourself: skipping the meeting, softening the post, staying home. This is the *chilling effect*, and it falls hardest on the people a democracy most needs: those willing to disagree. Switzerland knows the pattern well. When it emerged in 1989 that the state had maintained secret files on hundreds of thousands of people — trade unionists, peace and anti-nuclear campaigners, the women\'s movement, anyone deemed "nonconformist" — it triggered the largest protest in the country\'s postwar history.',
       ],
     },
     {
       kind: 'p',
       lines: [
-        'But Browne names the other half of the story too: *dark sousveillance*, watching from below. Slipping out of sight, turning the powerful\'s own tools back on them, keeping each other safe — from the networks that helped enslaved people escape to the phone that films a police stop. Refusing to be seen on someone else\'s terms is itself a long political practice.',
+        'This is the case Zizek\'s framework was built for. The harm of the Fichenaffare was not located in any identifiable decision or agent. There was no villain who chose to destroy lives. There was a bureaucratic apparatus that classified people, an administrative logic that treated political difference as security risk, and citizens who had no knowledge it was happening. What Zizek calls systemic violence does not require bad intentions. It only requires a system oriented toward control.',
+      ],
+    },
+    {
+      kind: 'p',
+      lines: [
+        'But surveillance also generates its own counter-practices. Simone Browne calls it *dark sousveillance*: watching from below, refusing visibility on the powerful\'s terms, using their tools against them. Refusing to be seen on someone else\'s terms has long been a political act.',
       ],
     },
     {
       kind: 'source',
-      text: 'Swiss *Fichenaffäre* inquiry (1989); Blick on the Geneva case (2025); Browne (2015).',
+      text: '[Žižek (2008)](https://openlibrary.org/books/OL23092607M/Violence "Žižek, Slavoj. (2008). Violence: Six sideways reflections. Picador."); [Browne (2015)](https://www.dukeupress.edu/dark-matters "Browne, Simone. (2015). Dark matters: On the surveillance of blackness. Duke University Press.")',
     },
   ],
 };
@@ -405,11 +480,11 @@ const case4Right: ZinePageDef = {
   id: 'case04-right',
   blocks: [
     { kind: 'tag', variant: 'cool', text: 'LEVEL 4 · WHEN THE STAKES ARE HIGH · [▓▓▓▓]' },
-    { kind: 'h', lines: ['Protect yourself, and the people beside you.'] },
+    { kind: 'h', lines: [['Protect yourself, ', g('and the people beside you'), '.']] },
     {
       kind: 'p',
       lines: [
-        'Most days, most people will not need this level. But anyone who organizes, demonstrates, or investigates should know it — and the first thing to know is that here, safety is never something you achieve alone.',
+        'The chilling effect is most powerful when it is invisible: when you do not realize you have stopped doing something, only that it no longer seems worth the risk. This level is for people who are already taking risks that matter — organizing, documenting, protesting. The first principle is that no one manages this alone. Security at this level is a collective practice or it is not security.',
       ],
     },
     {
@@ -423,12 +498,12 @@ const case4Right: ZinePageDef = {
       kind: 'step',
       lead: 'Prepare a device before an action.',
       body: [
-        'Carry as little sensitive data as possible. Lock it with a passcode rather than your face or fingerprint, which can be compelled from you more easily and are less protected in law. When in doubt, bring a cheap second phone with nothing on it.',
+        'Carry as little sensitive data as possible. Lock it with a passcode rather than biometrics in case fingerprints and faces are compelled from you. A passcode is usually better protected in law. When the stakes are high, a cheap second phone with nothing on it is worth the cost.',
       ],
     },
     {
       kind: 'step',
-      lead: 'Install updates the moment they arrive.',
+      lead: 'Install updates immediately.',
       body: [
         'They close the very gaps that spy software relies on; it is the plainest and most effective defense there is.',
       ],
@@ -437,19 +512,13 @@ const case4Right: ZinePageDef = {
       kind: 'step',
       lead: 'Turn visibility around.',
       body: [
-        'Browne\'s *dark sousveillance* also means documenting — filming abuses, sharing what happened, warning each other. Knowledge passed between people protects the whole group.',
+        'Documenting abuses, filming encounters with authorities, sharing what happened with people who were not there: this is Browne\'s *dark sousveillance* in practice. Information held collectively protects the whole network, not just the person who witnessed something.',
       ],
     },
     {
       kind: 'box',
-      title: 'VPN and encryption, in plain words',
+      title: 'VPN and encryption',
       blocks: [
-        {
-          kind: 'p',
-          lines: [
-            'Two words turn up constantly. Here is what they actually mean.',
-          ],
-        },
         {
           kind: 'p',
           lines: [
@@ -464,6 +533,10 @@ const case4Right: ZinePageDef = {
         },
       ],
     },
+    {
+      kind: 'source',
+      text: '[Browne (2015)](https://www.dukeupress.edu/dark-matters "Browne, Simone. (2015). Dark matters: On the surveillance of blackness. Duke University Press.")',
+    },
   ],
 };
 
@@ -473,35 +546,44 @@ const outroPage: ZinePageDef = {
   id: 'outro',
   vCenter: true,
   blocks: [
-    { kind: 'h', lines: ['No one becomes invisible.', 'That was never the goal.'] },
     {
-      kind: 'p',
+      kind: 'h',
       lines: [
-        'Every step takes something back from the machine, and the more people take even the small ones, the more expensive and unreliable mass surveillance becomes for everyone. Perfection is not the measure. Beginning at Level 1 already changes the arithmetic.',
-      ],
-    },
-    {
-      kind: 'p',
-      tone: 'dim',
-      lines: ['Three things worth carrying out of here:'],
-    },
-    {
-      kind: 'p',
-      lines: [
-        '**It is not yours to fix alone.** "Just change your settings" quietly moves the burden onto individuals. The real remedy is political — laws that forbid the data trade, not fines a corporation pays out of petty cash.',
+        ['No one becomes ', w('invisible'), '.'],
+        'That was never the goal.',
       ],
     },
     {
       kind: 'p',
       lines: [
-        '**Privacy is something you give to others.** Block a tracker, use Signal, keep your identities apart, and you protect everyone you are in contact with, not only yourself. It is an act of solidarity before it is an act of self-defense.',
+        'What this zine has described — data brokers, stalkerware, algorithms, classified files — are not aberrations. They are the routine operation of systems built to sort populations and handed new instruments for doing it. Zizek\'s point stands: subjective violence, the kind that makes the news, is only the visible surface of an objective violence harder to name because it does not belong to anyone in particular. The harm is in the infrastructure.',
+      ],
+    },
+    {
+      kind: 'p',
+      lines: ['Three things worth remembering from this zine:'],
+    },
+    {
+      kind: 'p',
+      lines: [
+        'Individual steps such as blocking a tracker, switching to Signal, and using a VPN are real and useful tools.',
       ],
     },
     {
       kind: 'p',
       lines: [
-        '**The deepest harm is the looking away.** Surveillance never lands on everyone equally; it follows the lines already cut by gender, race, class, and status. A missing protection is not neutral. It is a decision — and decisions can be contested.',
+        'Privacy is something you extend to others as much as to yourself: protect your own data and you also protect the people in your contacts, in your messages, and in your location history.',
       ],
+    },
+    {
+      kind: 'p',
+      lines: [
+        'Surveillance never lands on everybody equally. It follows the already cut lines by gender, race, class, and status — and if you look away, someone else might suffer for it.',
+      ],
+    },
+    {
+      kind: 'source',
+      text: '[Žižek (2008)](https://openlibrary.org/books/OL23092607M/Violence "Žižek, Slavoj. (2008). Violence: Six sideways reflections. Picador.")',
     },
   ],
 };
@@ -509,17 +591,20 @@ const outroPage: ZinePageDef = {
 const escapePage: ZinePageDef = {
   id: 'escape',
   blocks: [
-    { kind: 'h', lines: ['Escaping the Panopticon'] },
+    {
+      kind: 'h',
+      lines: [['Harm reduction, ', a('not'), ' the solution.']],
+    },
     {
       kind: 'p',
       lines: [
-        'The tower\'s power was never the guard. It was the not-knowing — the way uncertainty made each prisoner stand watch over themselves.',
+        'This zine offers harm reduction, not a full solution. You cannot opt out of systemic violence through individual choices alone. The data economy is structured to capture you by default, and structural problems require structural responses.',
       ],
     },
     {
       kind: 'p',
       lines: [
-        'That is why none of this is only about software. Every tracker blocked, every message sealed, every refusal of the default does two things at once: it hides you from the tower, and it refuses the job of being your own guard. No one tears the tower down by themselves. But you do not have to perform for it either — and when enough people step out of the light at the same moment, the tower has nothing left to watch.',
+        'The legal frameworks that allow states to purchase data courts would never permit them to seize, and the regulations that treat data as property to be traded rather than a dimension of personhood, require political contestation — not just better browser settings. The tips in this zine are worth doing. They are the beginning.',
       ],
     },
     {
@@ -530,27 +615,14 @@ const escapePage: ZinePageDef = {
 };
 
 const referencesList = [
-  '404 Media. (n.d.). Investigations on ICE, Palantir systems, and data-broker loopholes. https://www.404media.co/',
-  'Amnesty International Switzerland. (n.d.). Materials on data retention and BUEPF. https://www.amnesty.ch/',
-  'Associated Press. (2025). Reporting on data-sharing between CMS and DHS/ICE.',
-  'Blick. (2025, February 19). Reporting on covert surveillance of climate activists in Geneva. https://www.blick.ch/politik/',
+  'Bourdieu, Pierre, Wacquant, Loic Jean Dominique, & Farage, Samar. (1994). Rethinking the state: Genesis and structure of the bureaucratic field. *Sociological Theory, 12*(1), 1–18. https://doi.org/10.2307/202032',
   'Browne, Simone. (2015). *Dark matters: On the surveillance of blackness*. Duke University Press.',
-  'Coalition Against Stalkerware. (n.d.). *Information for media*. https://stopstalkerware.org/information-for-media/',
-  'Dubrofsky, Rachel E., & Magnet, Shoshana Amielle (Eds.). (2015). *Feminist surveillance studies*. Duke University Press.',
-  'Electronic Frontier Foundation. (n.d.). *Surveillance self-defense*. https://ssd.eff.org/',
-  'Federal Data Protection and Information Commissioner (FDPIC). (n.d.). *The revised Federal Act on Data Protection (revFADP)*. https://www.edoeb.admin.ch/',
-  'Foucault, Michel. (1977). *Discipline and punish: The birth of the prison* (Alan Sheridan, Trans.). Vintage Books. (Original work published 1975).',
-  'grundrechte.ch. (n.d.). *From the fiche scandal to modern intelligence systems*. https://grundrechte.ch/',
-  'Haraway, Donna J. (1988). Situated knowledges: The science question in feminism and the privilege of partial perspective. *Feminist Studies, 14*(3), 575-599. https://doi.org/10.2307/3178066',
-  'Mozilla Foundation. (2022). *Privacy not included: Reproductive health apps and wearables*. https://foundation.mozilla.org/en/privacynotincluded/',
-  'Privacy International. (2023). *All eyes on my period: Period tracking apps and the future of privacy in a post-Roe world*. https://privacyinternational.org/long-read/5593/all-eyes-my-period-period-tracking-apps-and-future-privacy-post-roe-world',
-  'Proton AG. (2023, April 21). *Why Proton won\'t comply with US anti-abortion data requests*. https://proton.me/blog/data-privacy-abortion',
-  'Proton AG. (n.d.). *Why is Proton based in Switzerland?* https://proton.me/blog/switzerland',
-  'required AG. (2024). *revFADP - New Swiss data protection law since September 1, 2023*. https://required.com/de/blog/revdsg-datenschutzgesetz/',
-  'Smith, Andrea. (2015). Not-seeing: State surveillance, settler colonialism, and gender violence. In Rachel E. Dubrofsky & Shoshana Amielle Magnet (Eds.), *Feminist surveillance studies* (pp. 21-38). Duke University Press.',
-  'Swiss Confederation. (2023). *Federal Act on Data Protection (FADP)* (Status as of September 1, 2023). Fedlex. https://www.fedlex.admin.ch/',
-  'Swiss Confederation. (n.d.). *Federal Act on the Surveillance of Post and Telecommunications (BUEPF)*. Fedlex. https://www.fedlex.admin.ch/',
-  'Zuboff, Shoshana. (2019). *The age of surveillance capitalism: The fight for a human future at the new frontier of power*. PublicAffairs.',
+  'Dubrofsky, Rachel Evelyn, & Magnet, Shoshana Amielle (Eds.). (2015). *Feminist surveillance studies*. Duke University Press.',
+  'Federal Act on Data Protection (revFADP), SR 235.1 (2023). https://www.fedlex.admin.ch/eli/cc/2022/491/en',
+  'Foucault, Michel. (1977). *Discipline and punish: The birth of the prison* (Alan Sheridan, Trans.). Pantheon Books.',
+  'Gren, Nina, Abdelhady, Dalia, & Joormann, Martin. (2024). Unmasking the impact of bureaucratic violence. *Refuge: Canada’s Journal on Refugees, 39*(2), 1–13. https://doi.org/10.25071/1920-7336.41163',
+  'Kong, Lily. (2001). Mapping "new" geographies of religion: Politics and poetics in modernity. *Progress in Human Geography, 25*(2), 211–233. https://doi.org/10.1191/030913201678580485',
+  'Zizek, Slavoj. (2008). *Violence: Six sideways reflections*. Picador.',
 ];
 
 // ---------- BACK ----------
