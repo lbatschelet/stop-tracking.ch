@@ -712,6 +712,27 @@
   color: #fff1cc;
 }
 
+.calloutParagraph {
+  margin: 0;
+}
+
+.calloutParagraph + .calloutParagraph {
+  margin-top: 6px;
+}
+
+.calloutList {
+  margin: 6px 0 0;
+  padding-left: 1.35em;
+}
+
+.calloutListItem {
+  margin: 0 0 4px;
+}
+
+.calloutListItem:last-child {
+  margin-bottom: 0;
+}
+
 /* Big call-to-action on the final right page. */
 .cta {
   font-size: clamp(18px, 2.2vw, 26px);

@@ -500,14 +500,62 @@ function Block({
               ? limit - title.length - 1
               : 0
             : limit;
+      const entries = block.lines.map((line) => {
+        if (typeof line === 'string') {
+          const bulletMatch = line.match(/^\s*-\s+(.*)$/);
+          if (bulletMatch) return { kind: 'bullet' as const, line: bulletMatch[1] as Line };
+        }
+        return { kind: 'text' as const, line };
+      });
+
+      let remaining = bodyLimit ?? Number.MAX_SAFE_INTEGER;
+      const visibleEntries: Array<{ kind: 'text' | 'bullet'; line: Line }> = [];
+      for (let i = 0; i < entries.length; i++) {
+        if (remaining <= 0) break;
+        if (i > 0) {
+          if (remaining < 1) break;
+          remaining -= 1;
+        }
+        const { content, used } = takeFromLine(entries[i].line, remaining);
+        if (!content || used === 0) break;
+        remaining -= used;
+        visibleEntries.push({ kind: entries[i].kind, line: content });
+      }
+
+      const calloutNodes: ReactNode[] = [];
+      let bulletBuffer: Line[] = [];
+      const flushBullets = (key: string) => {
+        if (bulletBuffer.length === 0) return;
+        calloutNodes.push(
+          <ul key={key} className={styles.calloutList}>
+            {bulletBuffer.map((line, i) => (
+              <li key={i} className={styles.calloutListItem}>
+                <LineContent line={line} plain={inReferences} />
+              </li>
+            ))}
+          </ul>,
+        );
+        bulletBuffer = [];
+      };
+
+      visibleEntries.forEach((entry, idx) => {
+        if (entry.kind === 'bullet') {
+          bulletBuffer.push(entry.line);
+          return;
+        }
+        flushBullets(`list-${idx}`);
+        calloutNodes.push(
+          <p key={`p-${idx}`} className={styles.calloutParagraph}>
+            <LineContent line={entry.line} plain={inReferences} />
+          </p>,
+        );
+      });
+      flushBullets('list-final');
+
       return (
         <div className={styles.calloutBox}>
           {hasTitle && <div className={styles.calloutHeader}>{title.slice(0, titleLimit)}</div>}
-          {(bodyLimit === undefined || bodyLimit > 0) && (
-            <p className={styles.calloutText}>
-              <Lines lines={block.lines} plain={inReferences} charLimit={bodyLimit} />
-            </p>
-          )}
+          {(bodyLimit === undefined || bodyLimit > 0) && <div className={styles.calloutText}>{calloutNodes}</div>}
         </div>
       );
     }

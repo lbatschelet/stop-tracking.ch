@@ -549,24 +549,11 @@ const outroPage: ZinePageDef = {
     },
     {
       kind: 'callout',
-      lines: ['Three things worth remembering from this zine:'],
-    },
-    {
-      kind: 'p',
       lines: [
-        'Individual steps such as blocking a tracker, switching to Signal, and using a VPN are real and useful tools.',
-      ],
-    },
-    {
-      kind: 'p',
-      lines: [
-        'Privacy is something you extend to others as much as to yourself: protect your own data and you also protect the people in your contacts, in your messages, and in your location history.',
-      ],
-    },
-    {
-      kind: 'p',
-      lines: [
-        'Surveillance never lands on everybody equally. It follows the already cut lines by gender, race, class, and status — and if you look away, someone else might suffer for it.',
+        'Three things worth remembering from this zine:',
+        '- Individual steps such as blocking a tracker, switching to Signal, and using a VPN are real and useful tools.',
+        '- Privacy is something you extend to others as much as to yourself: protect your own data and you also protect the people in your contacts, in your messages, and in your location history.',
+        '- Surveillance never lands on everybody equally. It follows the already cut lines by gender, race, class, and status — and if you look away, someone else might suffer for it.',
       ],
     },
     {

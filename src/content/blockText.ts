@@ -39,7 +39,15 @@ export function blockCharCount(block: ZineBlock): number {
       return sourceVisibleText(block.text).length;
     case 'callout': {
       const titleLen = block.title?.trim().length ?? 0;
-      return linesCharCount(block.lines) + (titleLen > 0 ? titleLen + 1 : 0);
+      const linesLen = block.lines.reduce((sum, line, i) => {
+        let n = lineLength(line);
+        if (typeof line === 'string') {
+          const bulletMatch = line.match(/^\s*-\s+(.*)$/);
+          if (bulletMatch) n = bulletMatch[1].length;
+        }
+        return sum + n + (i > 0 ? 1 : 0);
+      }, 0);
+      return linesLen + (titleLen > 0 ? titleLen + 1 : 0);
     }
     case 'bottomline':
     case 'bracket':
