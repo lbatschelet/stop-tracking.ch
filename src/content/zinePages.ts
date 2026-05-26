@@ -557,78 +557,12 @@ const outroPage: ZinePageDef = {
       ],
     },
     {
-      kind: 'source',
-      text: '[Žižek (2008)](https://openlibrary.org/books/OL23092607M/Violence "Žižek, Slavoj. (2008). Violence: Six sideways reflections. Picador.")',
-    },
-  ],
-};
-
-const escapePage: ZinePageDef = {
-  id: 'escape',
-  blocks: [
-    {
-      kind: 'h',
-      lines: [['Harm reduction, ', a('not'), ' the solution.']],
-    },
-    {
-      kind: 'p',
-      lines: [
-        'This zine offers harm reduction, not a full solution. You cannot opt out of systemic violence through individual choices alone. The data economy is structured to capture you by default, and structural problems require structural responses.',
-      ],
-    },
-    {
-      kind: 'p',
-      lines: [
-        'The legal frameworks that allow states to purchase data courts would never permit them to seize, and the regulations that treat data as property to be traded rather than a dimension of personhood, require political contestation — not just better browser settings. The tips in this zine are worth doing. They are the beginning.',
-      ],
-    },
-    {
       kind: 'cta',
       lines: ['Start at Level 1. Today.'],
     },
-  ],
-};
-
-const referencesList = [
-  '404 Media. (n.d.). Investigations on ICE, Palantir systems, and data-broker loopholes. https://www.404media.co/',
-  'Amnesty International Switzerland. (n.d.). Materials on data retention and BUEPF. https://www.amnesty.ch/',
-  'Associated Press. (2025). Reporting on data-sharing between CMS and DHS/ICE. https://apnews.com/',
-  'Blick. (2025, February 19). Reporting on covert surveillance of climate activists in Geneva. https://www.blick.ch/politik/',
-  'Bourdieu, Pierre, Wacquant, Loic Jean Dominique, & Farage, Samar. (1994). Rethinking the state: Genesis and structure of the bureaucratic field. *Sociological Theory, 12*(1), 1–18. https://doi.org/10.2307/202032',
-  'Browne, Simone. (2015). *Dark matters: On the surveillance of blackness*. Duke University Press.',
-  'Coalition Against Stalkerware. (n.d.). *Information for media*. https://stopstalkerware.org/information-for-media/',
-  'Dubrofsky, Rachel Evelyn, & Magnet, Shoshana Amielle (Eds.). (2015). *Feminist surveillance studies*. Duke University Press.',
-  'Electronic Frontier Foundation. (n.d.). *Surveillance self-defense*. https://ssd.eff.org/',
-  'Federal Act on Data Protection (revFADP), SR 235.1 (2023). https://www.fedlex.admin.ch/eli/cc/2022/491/en',
-  'Foucault, Michel. (1977). *Discipline and punish: The birth of the prison* (Alan Sheridan, Trans.). Pantheon Books.',
-  'Gren, Nina, Abdelhady, Dalia, & Joormann, Martin. (2024). Unmasking the impact of bureaucratic violence. *Refuge: Canada’s Journal on Refugees, 39*(2), 1–13. https://doi.org/10.25071/1920-7336.41163',
-  'grundrechte.ch. (n.d.). *From the fiche scandal to modern intelligence systems*. https://grundrechte.ch/',
-  'Kong, Lily. (2001). Mapping "new" geographies of religion: Politics and poetics in modernity. *Progress in Human Geography, 25*(2), 211–233. https://doi.org/10.1191/030913201678580485',
-  'Mozilla Foundation. (2022). *Privacy not included: Reproductive health apps and wearables*. https://foundation.mozilla.org/en/privacynotincluded/',
-  'Privacy International. (2023). *All eyes on my period: Period tracking apps and the future of privacy in a post-Roe world*. https://privacyinternational.org/long-read/5593/all-eyes-my-period-period-tracking-apps-and-future-privacy-post-roe-world',
-  'required AG. (2024). *revFADP - New Swiss data protection law since September 1, 2023*. https://required.com/de/blog/revdsg-datenschutzgesetz/',
-  'Swiss Confederation. (2023). *Federal Act on Data Protection (FADP)* (Status as of September 1, 2023). Fedlex. https://www.fedlex.admin.ch/',
-  'Swiss Confederation. (n.d.). *Federal Act on the Surveillance of Post and Telecommunications (BUEPF)*. Fedlex. https://www.fedlex.admin.ch/',
-  'Žižek, Slavoj. (2008). *Violence: Six sideways reflections*. Picador.',
-];
-
-// ---------- BACK ----------
-
-const backPage: ZinePageDef = {
-  id: 'back',
-  blocks: [
     {
-      kind: 'p',
-      tone: 'dim',
-      lines: [
-        'This page itself does not track you. Once you open external links, the destination sites apply their own policies and tracking may happen there.',
-      ],
-    },
-    { kind: 'toolkit' },
-    {
-      kind: 'box',
-      title: 'References',
-      blocks: referencesList.map((entry) => ({ kind: 'p', lines: [entry] })),
+      kind: 'source',
+      text: '[Žižek (2008)](https://openlibrary.org/books/OL23092607M/Violence "Žižek, Slavoj. (2008). Violence: Six sideways reflections. Picador.")',
     },
   ],
 };
@@ -642,6 +576,5 @@ export const zineSpreads: ZineSpreadDef[] = [
   { id: 'case-02', left: case2Left, right: case2Right },
   { id: 'case-03', left: case3Left, right: case3Right },
   { id: 'case-04', left: case4Left, right: case4Right },
-  { id: 'spread-6', left: outroPage, right: escapePage },
-  { id: 'back', layout: 'single', left: backPage },
+  { id: 'spread-6', layout: 'single', left: outroPage },
 ];

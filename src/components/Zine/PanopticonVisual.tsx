@@ -10,10 +10,6 @@ function rand(min: number, max: number) {
   return min + Math.random() * (max - min);
 }
 
-function easeInOutSine(t: number) {
-  return -(Math.cos(Math.PI * t) - 1) / 2;
-}
-
 function shortestDelta(from: number, to: number) {
   return ((to - from + 540) % 360) - 180;
 }
@@ -55,13 +51,18 @@ function Tower() {
 
 export function PanopticonVisual() {
   const beamRef = useRef<SVGGElement>(null);
+  const svgRef = useRef<SVGSVGElement>(null);
 
   useEffect(() => {
     const reduced =
       typeof window.matchMedia === 'function' &&
       window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const beam = beamRef.current;
-    if (!beam) return;
+    const svg = svgRef.current;
+    if (!beam || !svg) return;
+
+    const BASE_BEAM_ANGLE = 27.5;
+    const POINTER_FALLOFF_MS = 1200;
 
     const applyBeam = (angle: number) => {
       beam.setAttribute('transform', `rotate(${angle})`);
@@ -72,46 +73,138 @@ export function PanopticonVisual() {
       return;
     }
 
-    let angle = rand(0, 360);
-    let fromAngle = angle;
-    let toAngle = angle;
-    let segmentStart = performance.now();
-    let segmentDuration = rand(3200, 7800);
+    let currentAngle = rand(0, 360);
+    let desiredAngle = currentAngle;
+    let smoothedTarget = currentAngle;
+    let speed = 0;
+    let direction = 1;
+    let phase: 'hold' | 'move' = 'hold';
+    let holdUntil = performance.now() + rand(120, 300);
+    let lastPointerAt = 0;
+    let randomPickAt = performance.now() + rand(900, 2600);
     let raf = 0;
+    let last = performance.now();
 
-    const nextSegment = (now: number) => {
-      fromAngle = angle;
-      toAngle = fromAngle + shortestDelta(fromAngle, rand(0, 360));
-      segmentStart = now;
-      segmentDuration = rand(2800, 8200);
+    const MAX_SPEED = 58; // deg/s
+    const ACCEL = 42; // deg/s^2
+    const DECEL = 58; // deg/s^2
+    const ARRIVE_EPS = 0.8; // deg
+
+    const updateTargetFromClient = (clientX: number, clientY: number) => {
+      const rect = svg.getBoundingClientRect();
+      const cx = rect.left + rect.width * 0.5;
+      const cy = rect.top + rect.height * 0.49;
+      const dx = clientX - cx;
+      const dy = clientY - cy;
+      const dist = Math.hypot(dx, dy);
+      // Around the center the angle becomes unstable; ignore that noise.
+      if (dist < Math.max(rect.width, rect.height) * 0.06) return;
+      desiredAngle = (Math.atan2(dy, dx) * 180) / Math.PI - BASE_BEAM_ANGLE;
+      lastPointerAt = performance.now();
     };
 
-    nextSegment(segmentStart);
-    applyBeam(angle);
+    const onPointerMove = (e: PointerEvent) => {
+      updateTargetFromClient(e.clientX, e.clientY);
+    };
+
+    const onTouchStart = (e: TouchEvent) => {
+      const t = e.touches[0];
+      if (!t) return;
+      updateTargetFromClient(t.clientX, t.clientY);
+    };
+
+    const onTouchMove = (e: TouchEvent) => {
+      const t = e.touches[0];
+      if (!t) return;
+      updateTargetFromClient(t.clientX, t.clientY);
+    };
+
+    window.addEventListener('pointermove', onPointerMove, { passive: true });
+    window.addEventListener('touchstart', onTouchStart, { passive: true });
+    window.addEventListener('touchmove', onTouchMove, { passive: true });
+    applyBeam(currentAngle);
 
     const tick = (now: number) => {
-      const elapsed = now - segmentStart;
-      if (elapsed >= segmentDuration) {
-        angle = toAngle;
-        nextSegment(now);
+      const dt = Math.min((now - last) / 1000, 0.05);
+      last = now;
+
+      const pointerActive = now - lastPointerAt < POINTER_FALLOFF_MS;
+      if (!pointerActive && now >= randomPickAt) {
+        desiredAngle = rand(0, 360);
+        randomPickAt = now + rand(1800, 4200);
       }
 
-      const t = easeInOutSine(Math.min(1, (now - segmentStart) / segmentDuration));
-      angle = fromAngle + (toAngle - fromAngle) * t;
+      // Smooth out raw target jumps (mouse/touch/random) before movement logic.
+      const targetSmoothing = pointerActive ? 6.2 : 2.8;
+      smoothedTarget +=
+        shortestDelta(smoothedTarget, desiredAngle) * (1 - Math.exp(-targetSmoothing * dt));
 
-      applyBeam(angle);
+      const diff = shortestDelta(currentAngle, smoothedTarget);
+      const absDiff = Math.abs(diff);
+      const desiredDir = diff >= 0 ? 1 : -1;
+
+      if (phase === 'hold') {
+        speed = 0;
+        if (now >= holdUntil && absDiff > ARRIVE_EPS) {
+          direction = desiredDir;
+          phase = 'move';
+        }
+      } else {
+        if (absDiff <= ARRIVE_EPS) {
+          currentAngle = smoothedTarget;
+          speed = 0;
+          phase = 'hold';
+          holdUntil = now + (pointerActive ? 90 : rand(150, 340));
+          applyBeam(currentAngle);
+          raf = requestAnimationFrame(tick);
+          return;
+        }
+
+        // If target flips behind us: brake to stop, short hold, then re-accelerate.
+        if (desiredDir !== direction) {
+          speed = Math.max(0, speed - DECEL * dt);
+          if (speed === 0) {
+            direction = desiredDir;
+            phase = 'hold';
+            holdUntil = now + (pointerActive ? 90 : rand(120, 260));
+          }
+        } else {
+          // Kinematic profile: accelerate early, decelerate naturally near target.
+          const distanceLimitedSpeed = Math.sqrt(Math.max(0, 2 * DECEL * absDiff));
+          const targetSpeed = Math.min(MAX_SPEED, distanceLimitedSpeed);
+          if (speed < targetSpeed) speed = Math.min(targetSpeed, speed + ACCEL * dt);
+          else speed = Math.max(targetSpeed, speed - DECEL * dt);
+
+          const step = speed * dt;
+          if (step >= absDiff) {
+            currentAngle = smoothedTarget;
+            speed = 0;
+            phase = 'hold';
+            holdUntil = now + (pointerActive ? 90 : rand(150, 340));
+          } else if (speed > 0) {
+            currentAngle += direction * step;
+          }
+        }
+      }
+
+      applyBeam(currentAngle);
       raf = requestAnimationFrame(tick);
     };
 
     raf = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(raf);
+    return () => {
+      cancelAnimationFrame(raf);
+      window.removeEventListener('pointermove', onPointerMove);
+      window.removeEventListener('touchstart', onTouchStart);
+      window.removeEventListener('touchmove', onTouchMove);
+    };
   }, []);
 
   const beamOrigin = `translate(${TOWER_X} ${TOWER_Y})`;
 
   return (
     <div className={styles.coverVisual} aria-hidden="true">
-      <svg viewBox="-18 -12 136 102" className={styles.coverSvg}>
+      <svg ref={svgRef} viewBox="-18 -12 136 102" className={styles.coverSvg}>
         <defs>
           <filter id="beamSoft" x="-80%" y="-80%" width="260%" height="260%">
             <feGaussianBlur stdDeviation="1.6" result="blur" />

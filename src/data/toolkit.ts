@@ -30,7 +30,6 @@ export const orgLinks: { label: string; href: string }[] = [
   { label: 'Digitale Gesellschaft', href: 'https://www.digitale-gesellschaft.ch/' },
   { label: 'grundrechte.ch', href: 'https://grundrechte.ch/' },
   { label: 'Amnesty Switzerland', href: 'https://www.amnesty.ch/de/themen/uberwachung' },
-  { label: 'FDPIC (EDÖB)', href: 'https://www.edoeb.admin.ch/' },
   { label: 'Coalition Against Stalkerware', href: 'https://stopstalkerware.org/' },
   { label: 'EFF Surveillance Self-Defense', href: 'https://ssd.eff.org/' },
 ];

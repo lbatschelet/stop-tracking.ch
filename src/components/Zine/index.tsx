@@ -1,6 +1,9 @@
 'use client';
 
+import Link from 'next/link';
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { ResourceNavIcon } from '@/components/ResourceNavIcon';
+import { resourceActions } from '@/data/resourceNav';
 import { zinePages } from './spreads';
 import styles from './zine.module.css';
 import { ZineNav } from './ZineNav';
@@ -209,25 +212,61 @@ export default function Zine() {
 
       <div className={styles.stage}>
         <div className={styles.pageViewport}>
-          <div
-            className={styles.pageShell}
-            onTouchStart={onTouchStart}
-            onTouchEnd={onTouchEnd}
-          >
-            <div className={styles.terminalBar}>
-              <span className={styles.terminalDots} aria-hidden="true">
-                <i />
-                <i />
-                <i />
-              </span>
-              <span className={styles.terminalPath}>~/versteckis/{page.id}.md</span>
-              <span className={styles.terminalState}>
-                {page.id === 'cover' ? 'LIVE' : <MiniPanopticonBadge />}
-              </span>
+          <div className={styles.frameWithActions}>
+            <div
+              className={styles.pageShell}
+              onTouchStart={onTouchStart}
+              onTouchEnd={onTouchEnd}
+            >
+              <div className={styles.terminalBar}>
+                <span className={styles.terminalDots} aria-hidden="true">
+                  <i />
+                  <i />
+                  <i />
+                </span>
+                <span className={styles.terminalPath}>~/stop-tracking/{page.id}.md</span>
+                <span className={styles.terminalState}>
+                  {page.id === 'cover' ? 'LIVE' : <MiniPanopticonBadge />}
+                </span>
+              </div>
+              <div key={`${page.id}-${navGen}`} className={styles.pageInner}>
+                {page.content}
+              </div>
             </div>
-            <div key={`${page.id}-${navGen}`} className={styles.pageInner}>
-              {page.content}
-            </div>
+            <nav className={styles.externalActions} aria-label="Further resources">
+              {resourceActions.map((action) => {
+                const className = styles.externalActionButton;
+                const icon = <ResourceNavIcon id={action.id} className={styles.externalIconSvg} />;
+
+                if (action.external) {
+                  return (
+                    <a
+                      key={action.id}
+                      className={className}
+                      href={action.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={action.label}
+                      data-label={action.label}
+                    >
+                      {icon}
+                    </a>
+                  );
+                }
+
+                return (
+                  <Link
+                    key={action.id}
+                    className={className}
+                    href={action.href}
+                    aria-label={action.label}
+                    data-label={action.label}
+                  >
+                    {icon}
+                  </Link>
+                );
+              })}
+            </nav>
           </div>
         </div>
       </div>

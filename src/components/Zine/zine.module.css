@@ -10,6 +10,7 @@
   --warm-border: #3a2018;
   --cool-bg: #0d1410;
   --cool-border: #1f3a2a;
+  --page-ratio: 0.711111; /* 640 / 900 */
 
   height: 100%;
   background: var(--bg);
@@ -50,23 +51,105 @@
 
 .pageViewport {
   width: 100%;
-  height: min(900px, calc(100vh - 120px));
+  height: calc(100vh - 120px);
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.pageShell {
-  width: min(640px, calc(100vw - 32px));
+.frameWithActions {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 12px;
   height: 100%;
-  max-height: min(900px, calc(100vh - 120px));
-  margin: 0 auto;
+}
+
+.pageShell {
+  aspect-ratio: 640 / 900;
+  width: min(calc(100vw - 32px), calc((100vh - 120px) * var(--page-ratio)));
+  height: auto;
+  max-height: calc(100vh - 120px);
+  margin: 0;
+  flex: 0 0 auto;
   overflow: hidden;
   box-shadow: 0 12px 48px rgba(0, 0, 0, 0.45);
   border: 1px solid #242424;
   border-radius: 4px;
   background: #0b0b0b;
   touch-action: pan-y;
+}
+
+.externalActions {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 8px;
+  margin-top: 2px;
+  flex: 0 0 auto;
+}
+
+.externalActionButton {
+  display: inline-flex;
+  position: relative;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  padding: 0;
+  border: 1px solid #2a2a2a;
+  border-radius: 4px;
+  background: rgba(14, 14, 14, 0.84);
+  color: var(--ink);
+  text-decoration: none;
+  transition:
+    border-color 120ms ease,
+    color 120ms ease,
+    transform 120ms ease,
+    background 120ms ease;
+}
+
+.externalActionButton::after {
+  content: attr(data-label);
+  position: absolute;
+  right: calc(100% + 8px);
+  top: 50%;
+  transform: translateY(-50%) translateX(3px);
+  padding: 6px 9px;
+  border: 1px solid #2f3b33;
+  border-radius: 3px;
+  background: rgba(11, 11, 11, 0.98);
+  color: #c8c8c8;
+  font-size: 11.5px;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition:
+    opacity 100ms ease-out,
+    transform 100ms ease-out;
+}
+
+.externalActionButton:hover {
+  border-color: var(--green);
+  color: var(--green);
+  background: rgba(14, 20, 16, 0.95);
+  transform: translateY(-1px);
+}
+
+.externalActionButton:hover::after,
+.externalActionButton:focus-visible::after {
+  opacity: 1;
+  transform: translateY(-50%) translateX(0);
+}
+
+.externalIconSvg {
+  width: 23px;
+  height: 23px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
 .terminalBar {
@@ -158,8 +241,9 @@
   width: 100%;
   height: 100%;
   min-height: 100%;
+  container-type: inline-size;
   box-sizing: border-box;
-  padding: 32px 30px;
+  padding: clamp(24px, 4.4cqi, 36px) clamp(18px, 4cqi, 30px);
   position: relative;
   overflow-y: auto;
   overflow-x: hidden;
@@ -268,7 +352,7 @@
 }
 
 .zh {
-  font-size: clamp(18px, 2.25vw, 26px);
+  font-size: clamp(20px, 3.6cqi, 30px);
   line-height: 1.18;
   font-weight: 700;
   margin-bottom: 18px;
@@ -296,7 +380,7 @@
 }
 
 .zb {
-  font-size: clamp(10px, 0.95vw, 11.5px);
+  font-size: clamp(11px, 1.9cqi, 14px);
   line-height: 1.5;
   margin-bottom: 9px;
   color: var(--ink);
@@ -471,7 +555,7 @@
 }
 
 .coverTitle {
-  font-size: clamp(26px, 4.5vw, 52px);
+  font-size: clamp(38px, 9.8cqi, 90px);
   line-height: 1.1;
   font-weight: 700;
   color: var(--amber);
@@ -483,7 +567,7 @@
 }
 
 .coverSub {
-  font-size: clamp(12px, 1.4vw, 15px);
+  font-size: clamp(14px, 2.8cqi, 24px);
   color: var(--dim);
 }
 
@@ -501,6 +585,7 @@
 }
 
 .coverLayout {
+  --cover-balance-gap: clamp(10px, 1.6cqi, 18px);
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -509,13 +594,15 @@
   width: 100%;
   min-height: 100%;
   gap: 0;
+  padding-bottom: var(--cover-balance-gap);
+  container-type: size;
 }
 
 .coverText {
   text-align: center;
   flex-shrink: 0;
-  margin-top: -22px;
-  padding-bottom: 4px;
+  margin-top: var(--cover-balance-gap);
+  padding-bottom: 0;
 }
 
 .coverPrompt {
@@ -624,7 +711,7 @@
 
 /* Step block: bold lead + flowing description. */
 .step {
-  font-size: clamp(10px, 0.95vw, 11.5px);
+  font-size: clamp(11px, 1.9cqi, 14px);
   line-height: 1.5;
   margin-bottom: 11px;
   color: var(--ink);
@@ -640,7 +727,7 @@
 .source {
   margin-top: auto;
   padding-top: 14px;
-  font-size: clamp(8.5px, 0.8vw, 10px);
+  font-size: clamp(9px, 1.45cqi, 11px);
   line-height: 1.45;
   color: var(--dim);
   font-style: italic;
@@ -660,7 +747,7 @@
 
 /* Highlighted safety note (Case 2). */
 .safety {
-  font-size: clamp(10px, 0.95vw, 11.5px);
+  font-size: clamp(11px, 1.9cqi, 14px);
   line-height: 1.5;
   margin: 12px 0;
   padding: 10px 12px;
@@ -701,7 +788,7 @@
 
 .calloutText {
   margin: 0;
-  font-size: clamp(10px, 0.95vw, 11.5px);
+  font-size: clamp(11px, 1.9cqi, 14px);
   line-height: 1.5;
   color: #f0f4f5;
   font-weight: 500;
@@ -779,7 +866,7 @@
 
 .coverVisual {
   position: relative;
-  width: min(100%, 680px);
+  width: min(100%, 96cqi);
   flex: 0 0 auto;
   display: flex;
   align-items: flex-start;
@@ -793,7 +880,7 @@
 .coverSvg {
   width: 100%;
   height: auto;
-  max-height: min(58vh, 520px);
+  max-height: 86cqh;
   display: block;
   overflow: visible;
 }
@@ -818,7 +905,7 @@
   cursor: pointer;
   list-style: none;
   padding: 8px 12px;
-  font-size: clamp(10px, 0.95vw, 11.5px);
+  font-size: clamp(10px, 1.7cqi, 12px);
   color: var(--green);
   letter-spacing: 0.04em;
   user-select: none;
@@ -895,7 +982,7 @@
 
 .boxBody .zb,
 .boxBody .step {
-  font-size: clamp(9.5px, 0.9vw, 11px);
+  font-size: clamp(10px, 1.7cqi, 12px);
   margin-bottom: 8px;
 }
 
@@ -1025,12 +1112,43 @@
   }
 
   .coverText {
-    margin-top: 12px;
+    margin-top: var(--cover-balance-gap);
+  }
+
+  .coverTitle {
+    font-size: clamp(26px, 7.2cqi, 42px);
+  }
+
+  .coverSub {
+    font-size: clamp(12px, 2.6cqi, 16px);
   }
 
   .pageShell {
-    width: min(100%, calc(100vw - 24px));
+    width: min(calc(100vw - 24px), calc((100vh - 120px) * var(--page-ratio)));
     max-height: min(520px, calc(100vh - 120px));
+  }
+
+  .frameWithActions {
+    width: min(100%, calc(100vw - 24px));
+    height: auto;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .externalActions {
+    width: min(100%, calc(100vw - 24px));
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    margin-top: 0;
+    order: -1;
+  }
+
+  .externalActionButton {
+    width: 100%;
+    height: 34px;
+  }
+
+  .externalActionButton::after {
+    display: none;
   }
 
   .page {
@@ -1045,3 +1163,4 @@
     text-align: left;
   }
 }
+
